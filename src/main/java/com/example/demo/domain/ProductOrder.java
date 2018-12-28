@@ -1,6 +1,9 @@
 package com.example.demo.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -10,7 +13,10 @@ import java.util.Date;
 @Data
 @Entity
 @Table
+@Builder
 @EntityListeners(value = {AuditingEntityListener.class})
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductOrder {
     @Id
     @GeneratedValue

@@ -1,8 +1,12 @@
 package com.example.demo.domain;
 
 
+import com.example.demo.domain.enums.CashInfoState;
 import com.example.demo.domain.enums.PayMethod;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -10,7 +14,10 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table
+@Builder
 @EntityListeners(value = {AuditingEntityListener.class})
+@NoArgsConstructor
+@AllArgsConstructor
 public class CashInfo {
     @GeneratedValue
     @Id
@@ -30,7 +37,7 @@ public class CashInfo {
     private String expireDate;
 
     @Column
-    private boolean state;
+    private CashInfoState state;
 
     @JoinColumn(name = "order_id", referencedColumnName = "seq")
     @OneToOne

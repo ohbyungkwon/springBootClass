@@ -4,12 +4,12 @@ spring:
     url: jdbc:mysql://localhost:3306/shop?charcaterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: 123456
-#
-#  jpa:
-#    database: mysql
-#    hibernate:
-#      use-new-id-generator-mappings: false
-#      generate-ddl: true
+  #
+  #  jpa:
+  #    database: mysql
+  #    hibernate:
+  #      use-new-id-generator-mappings: false
+  #      generate-ddl: true
   jpa:
     database: mysql
     properties:
@@ -21,3 +21,6 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: update
+logging:
+  level:
+    root: debug

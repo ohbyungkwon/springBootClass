@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-public class UserController {
+public class UserController extends AbstractController{
     private UserService userService;
 
     @Autowired
@@ -20,9 +20,9 @@ public class UserController {
         this.userService=userService;
     }
 
-    @GetMapping("/users/{id}")
-    public ResponseEntity<?> searchUser(@PathVariable String id){
-        User user = userService.searchUser(id);
+    @GetMapping("/users/me")
+    public ResponseEntity<?> searchUser(){
+        User user = userService.searchUser("1");
         if(user == null){
             return ResponseEntity.badRequest().build();
         }else{
