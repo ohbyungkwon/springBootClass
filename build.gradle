@@ -25,26 +25,6 @@ repositories {
 
 
 dependencies {
-//    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
-//    implementation('org.springframework.boot:spring-boot-starter-web')
-//    
-//    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
-//    compile group: 'org.springframework.security', name: 'spring-security-core', version: '5.1.2.RELEASE'
-//
-//    // https://mvnrepository.com/artifact/org.springframework.security.oauth/spring-security-oauth2
-//    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.4.RELEASE'
-//
-//    // https://mvnrepository.com/artifact/joda-time/joda-time
-//    compile group: 'joda-time', name: 'joda-time', version: '2.10.1'
-//   
-//    compile('com.auth0:java-jwt:3.1.0')
-//
-//    compile('mysql:mysql-connector-java')
-//    compileOnly('org.projectlombok:lombok')
-//    testImplementation('org.springframework.boot:spring-boot-starter-test')
-//    
-//    ///
-    
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
     implementation('org.springframework.boot:spring-boot-starter-web')
 

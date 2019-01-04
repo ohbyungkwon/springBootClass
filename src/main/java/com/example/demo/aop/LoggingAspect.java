@@ -22,11 +22,11 @@ public class LoggingAspect {
         long start = System.currentTimeMillis();
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        //application request를 가져옴
+        //application request
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        Object[] objects = proceedingJoinPoint.getArgs();//매개변수 가져옴
+        Object[] objects = proceedingJoinPoint.getArgs();
         StringBuilder params = new StringBuilder();
         for(Object signatureArg : objects){
             if(!(signatureArg instanceof Principal)){
