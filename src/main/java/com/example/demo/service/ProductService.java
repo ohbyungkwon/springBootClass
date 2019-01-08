@@ -22,28 +22,6 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public void getProducts(){
-        ResponseEntity<ProductSerachResponse> productSerachResponse = restTemplate.getForEntity("http://openapi.11st.co.kr/openapi/OpenApiService.tmall?key=3cbec99cb426bf807ea21cdfea22c162&apiCode=ProductSearch&keyword="
-        , ProductSerachResponse.class);
-
-        if(productSerachResponse.getStatusCode().isError()){
-            log.info(productSerachResponse.getBody().toString());
-        }
-        else {
-            ProductSerachResponse productSerachResponseTemp = productSerachResponse.getBody();
-            List<ElevenProduct> productList = productSerachResponseTemp.getProducts();
-            for(int i = 0; i < productList.size(); i++){
-                 Product product = com.example.demo.domain.Product.builder()
-                        .imageUrl(productList.get(i).getProductImage())
-                        .price(productList.get(i).getSalePrice())
-                        .title(productList.get(i).getProductName())
-                        .build();
-
-                 productRepository.save(product);
-            }
-        }
-    }
-
     public List<ProductDto> showProduct(){
         List<Product> products = productRepository.findAll();
         List<ProductDto> productDtoList = new ArrayList<>();

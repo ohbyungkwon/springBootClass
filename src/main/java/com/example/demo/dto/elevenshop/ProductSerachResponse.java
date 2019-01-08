@@ -18,5 +18,4 @@ public class ProductSerachResponse {
     @XmlElementWrapper(name = "Products")
     @XmlElement(name = "ElevenProduct")
     private List<ElevenProduct> products;
-
 }
