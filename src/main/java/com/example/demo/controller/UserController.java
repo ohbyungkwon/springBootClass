@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @RestController
 public class UserController extends AbstractController{
@@ -17,12 +18,12 @@ public class UserController extends AbstractController{
 
     @Autowired
     UserController(UserService userService){
-        this.userService=userService;
+        this.userService = userService;
     }
 
     @GetMapping("/users/me")
-    public ResponseEntity<?> searchUser(){
-        User user = userService.searchUser("1");
+    public ResponseEntity<?> searchUser(Principal principal){
+        User user = userService.searchUser(principal.getName());
         if(user == null){
             return ResponseEntity.badRequest().build();
         }else{

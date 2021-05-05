@@ -57,4 +57,10 @@ public class User implements Serializable {
     @Column
     @LastModifiedDate
     private Date modifyDate;
+
+    @Column
+    private Date lastLogined;
+
+    @Column
+    private Boolean isEnable;
 }

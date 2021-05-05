@@ -31,11 +31,8 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-//        DateTime dateTime = new DateTime(user.getRegisterDate());
-//
-//        if(new Date().getTime() > dateTime.plusDays(30).toDate().getTime())
-//            return true;
-        return true;
+        DateTime lastLoginTime = new DateTime(user.getLastLogined());
+        return (new Date().getTime() < lastLoginTime.plusDays(30).toDate().getTime());
     }
 
     @Override
@@ -45,11 +42,12 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        DateTime modifiedDate = new DateTime(user.getModifyDate());
+        return new Date().getTime() < modifiedDate.plusDays(90).toDate().getTime();
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return user.getIsEnable();
     }
 }
