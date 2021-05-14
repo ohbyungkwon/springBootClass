@@ -23,6 +23,7 @@ public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter{
     private AuthenticationManager authenticationManager;
     private DataSource dataSource;
     private PasswordEncoder passwordEncoder;
+
     @Autowired
     AuthorizationConfig(
             AuthenticationManager authenticationManager,

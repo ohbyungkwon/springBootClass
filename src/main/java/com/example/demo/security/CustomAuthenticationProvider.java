@@ -1,6 +1,6 @@
-package com.example.demo.config;
+package com.example.demo.security;
 
-import com.example.demo.service.CustomUserDetailService;
+import com.example.demo.security.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationProvider;

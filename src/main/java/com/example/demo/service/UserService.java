@@ -1,10 +1,14 @@
 package com.example.demo.service;
 
+import com.example.demo.annotation.CustTransaction;
 import com.example.demo.domain.User;
+import com.example.demo.dto.ResponseComDto;
 import com.example.demo.dto.UserDto;
+import com.example.demo.exception.BadClientException;
 import com.example.demo.exception.DuplicateException;
 import com.example.demo.exception.NonRecommandUser;
 import com.example.demo.repository.UserRepository;
+import jdk.nashorn.internal.runtime.regexp.joni.exception.InternalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,9 +30,14 @@ public class UserService {
     }
 
     public User searchUser(String id){
-        return userRepository.findById(id);
+        User user =  userRepository.findById(id);
+        if(user == null){
+            throw new BadClientException("사용자 정보가 없습니다.");
+        }
+        return user;
     }
 
+    @CustTransaction
     public void createUser(UserDto.Create userDto){
         if(userRepository.findById(userDto.getId()) != null){
             throw new DuplicateException("아이디 중복");
@@ -36,13 +45,13 @@ public class UserService {
 
         int point = 0;
         if(userDto.getRecommandUser() != null) {
-            User user = userRepository.findByRecommandUser(userDto.getRecommandUser());
-            if(user == null) throw new NonRecommandUser("해당 아이디 없음");
-            //excpetion은 위로 뺸다.
+            User recommandUser = userRepository.findByRecommandUser(userDto.getRecommandUser());
+            if(recommandUser == null) throw new NonRecommandUser("추천 아이디 없음");
 
             point += 1000;
         }
-        User user = User.builder()
+
+        User newUser = User.builder()
                 .id(userDto.getId())
                 .pwd(passwordEncoder.encode(userDto.getPwd()))
                 .name(userDto.getName())
@@ -53,19 +62,48 @@ public class UserService {
                 .point(point)
                 .build();
 
-        userRepository.save(user);
+        if(userRepository.save(newUser) == null){
+            throw new InternalException("계정생성에 실패하였습니다.");
+        }
     }
 
-    public User update(UserDto.Update userDto, User user){
-        user.builder()
-                .pwd(userDto.getPwd())
-                .build();
-        return userRepository.save(user);
+    @CustTransaction
+    public void updateUserPassword(UserDto.UpdatePassword userDto, String userId){
+        User user = this.searchUser(userId);
+        user.setPwd(userDto.getPwd());
+
+        if(userRepository.save(user) != null){
+            throw new InternalException("비밀번호 변경에 실패하였습니다.");
+        }
     }
 
-    public void deleteUser(User user){
+    @CustTransaction
+    public String updateUser(UserDto.Update userDto, String userId){
+        User user = this.searchUser(userId);
+
+        String msg = "";
+        String addr = userDto.getAddr();
+        if(!addr.isEmpty()){
+            user.setAddr(addr);
+            msg = "주소가 변경되었습니다.";
+        }
+
+        boolean isEnable = userDto.getIsEnable();
+        if(user.getIsEnable() != isEnable){
+            user.setIsEnable(isEnable);
+            msg = "계정이 잠겼습니다.";
+        }
+
+        if(userRepository.save(user) != null){
+            throw new InternalException("본사로 문의 부탁드립니다.");
+        }
+
+        return msg;
+    }
+
+    @CustTransaction
+    public void deleteUser(String userId){
+        User user = this.searchUser(userId);
         userRepository.delete(user);
     }
 }
-
-//TODO validataion check, 가입시에 추천인 코드를 입력하면 포인트 더 주는 로직과 예외처리

@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.domain.User;
+import com.example.demo.dto.ResponseComDto;
 import com.example.demo.dto.UserDto;
+import com.example.demo.exception.BadClientException;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,48 +26,68 @@ public class UserController extends AbstractController{
     @GetMapping("/users/me")
     public ResponseEntity<?> searchUser(Principal principal){
         User user = userService.searchUser(principal.getName());
-        if(user == null){
-            return ResponseEntity.badRequest().build();
-        }else{
-            return new ResponseEntity<User>(user, HttpStatus.OK);
-        }
+
+        return new ResponseEntity<ResponseComDto>(
+                ResponseComDto.builder()
+                .resultMsg("")
+                .resultObj(user)
+                .build(), HttpStatus.OK);
     }
 
-    @PostMapping("/users")
+    @PostMapping("/user")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserDto.Create userDto, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             return ResponseEntity.badRequest().build();
         }
 
         userService.createUser(userDto);
-        return ResponseEntity.ok().build();
-    }
 
-    @PutMapping("/users/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable String id, @Valid @RequestBody UserDto.Update userDto, BindingResult bindingResult){
-        User user = userService.searchUser(id);
-        if(user == null){
+        return new ResponseEntity<ResponseComDto>(
+                ResponseComDto.builder()
+                .resultMsg("계정 생성이 완료되었습니다.")
+                .resultObj(null)
+                .build(), HttpStatus.OK);
+    }//회원가입
+
+    @PutMapping("/user")
+    public ResponseEntity<?> updateUser(Principal principal, @Valid @RequestBody UserDto.Update userDto,
+                                                BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
             return ResponseEntity.badRequest().build();
-        }else{
-            if(bindingResult.hasErrors()){
-                return ResponseEntity.badRequest().build();
-            }
-
-            if(userService.update(userDto, user) != null)
-               return ResponseEntity.ok().build();
-            else return ResponseEntity.badRequest().build();
         }
+
+        String msg = userService.updateUser(userDto, principal.getName());
+
+        return new ResponseEntity<ResponseComDto>(
+                ResponseComDto.builder()
+                        .resultMsg(msg)
+                        .resultObj(null)
+                        .build(), HttpStatus.OK);
+    }//계정 수정
+
+    @PutMapping("/user/pw")
+    public ResponseEntity<?> updateUserPassword(Principal principal, @Valid @RequestBody UserDto.UpdatePassword userDto,
+                                        BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return ResponseEntity.badRequest().build();
+        }
+
+        userService.updateUserPassword(userDto, principal.getName());
+
+        return new ResponseEntity<ResponseComDto>(
+                ResponseComDto.builder()
+                        .resultMsg("비밀번호 변경이 완료되었습니다.")
+                        .resultObj(null)
+                        .build(), HttpStatus.OK);
     }//비밀번호 수정
 
-    @DeleteMapping("/users/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable String id){
-        User user = userService.searchUser(id);
-        if(user == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        else {
-            userService.deleteUser(user);
-            return ResponseEntity.ok().build();
-        }
-    }
+    @DeleteMapping("/user")
+    public ResponseEntity<?> deleteUser(Principal principal){
+        userService.deleteUser(principal.getName());
+        return new ResponseEntity<ResponseComDto>(
+                ResponseComDto.builder()
+                        .resultMsg("회원탈퇴가 완료되었습니다.")
+                        .resultObj(null)
+                        .build(), HttpStatus.OK);
+    }//계정 삭제
 }

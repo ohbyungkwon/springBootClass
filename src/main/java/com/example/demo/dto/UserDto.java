@@ -44,6 +44,13 @@ public class UserDto {
 
     @Data
     public static class Update{
+        private String addr;
+
+        private Boolean isEnable;
+    }
+
+    @Data
+    public static class UpdatePassword{
         @NotEmpty(message = "pwd null")
         @Length(min = 4, max = 8)
         private String pwd;

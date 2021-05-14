@@ -1,4 +1,5 @@
 spring:
+  profiles: local
   batch:
     initialize-schema: always
   datasource:
@@ -6,12 +7,6 @@ spring:
     url: jdbc:mysql://localhost:3306/shop?charcaterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: diofc2473
-  #
-  #  jpa:
-  #    database: mysql
-  #    hibernate:
-  #      use-new-id-generator-mappings: false
-  #      generate-ddl: true
   jpa:
     database: mysql
     properties:
@@ -23,6 +18,26 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: update
-logging:
-  level:
-    root: info
+
+--- #local 환경
+spring:
+  profiles: local
+    logging:
+      level:
+      root: info
+
+--- #dev 환경
+spring:
+  profiles: dev
+    logging:
+      level:
+        root: info
+
+--- #prod 환경
+spring:
+  profiles: prod
+server:
+  port: 9090
+  logging:
+    level:
+      root: error

@@ -1,5 +1,6 @@
-package com.example.demo.domain;
+package com.example.demo.security;
 
+import com.example.demo.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.joda.time.DateTime;
