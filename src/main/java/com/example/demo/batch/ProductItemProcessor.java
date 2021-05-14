@@ -1,4 +1,4 @@
-package com.example.demo.job;
+package com.example.demo.batch;
 
 import com.example.demo.domain.Product;
 import com.example.demo.dto.elevenshop.ElevenProduct;

@@ -1,9 +1,8 @@
-package com.example.demo.job;
+package com.example.demo.batch.job;
 
 import com.example.demo.domain.Product;
 import com.example.demo.dto.elevenshop.ElevenProduct;
 import com.example.demo.dto.elevenshop.ProductSerachResponse;
-import com.example.demo.service.ProductService;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -13,7 +12,6 @@ import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.*;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.EntityManagerFactory;
-import java.io.Serializable;
 import java.util.List;
 
 @Configuration

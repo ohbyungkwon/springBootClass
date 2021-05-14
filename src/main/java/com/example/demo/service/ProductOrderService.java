@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.annotation.CustTransaction;
 import com.example.demo.domain.CashInfo;
 import com.example.demo.domain.Product;
 import com.example.demo.domain.ProductOrder;
@@ -30,7 +31,7 @@ public class ProductOrderService {
         this.userRepository = userRepository;
     }
 
-    @Transactional
+    @CustTransaction
     public ProductOrder saveOrder(OrderDto.Create dto, String loginedUser){
         Product product = productRepository.findProductById(dto.getSeqProduct());
 
