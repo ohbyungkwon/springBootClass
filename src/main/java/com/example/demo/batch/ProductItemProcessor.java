@@ -3,7 +3,9 @@ package com.example.demo.batch;
 import com.example.demo.domain.Product;
 import com.example.demo.dto.elevenshop.ElevenProduct;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.context.annotation.Profile;
 
+@Profile("!local")
 public class ProductItemProcessor implements ItemProcessor<ElevenProduct, Product> {
 
     @Override

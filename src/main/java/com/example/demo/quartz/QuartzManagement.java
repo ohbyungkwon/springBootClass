@@ -4,11 +4,13 @@ import com.example.demo.quartz.job.SendEmailToLockUserJob;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
 @Component
+@Profile("!local")
 public class QuartzManagement {
     @Autowired
     private Scheduler scheduler;

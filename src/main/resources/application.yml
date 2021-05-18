@@ -1,5 +1,6 @@
 spring:
-  profiles: local
+  profiles:
+    active: local
   batch:
     initialize-schema: always
   datasource:
@@ -18,26 +19,14 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: update
-
---- #local 환경
-spring:
-  profiles: local
-    logging:
-      level:
-      root: info
-
---- #dev 환경
-spring:
-  profiles: dev
-    logging:
-      level:
-        root: info
-
---- #prod 환경
-spring:
-  profiles: prod
-server:
-  port: 9090
-  logging:
-    level:
-      root: error
+  cache:
+    type:
+      redis
+  redis:
+    host:
+      localhost
+    port:
+      6379
+logging:
+  level:
+    root: info

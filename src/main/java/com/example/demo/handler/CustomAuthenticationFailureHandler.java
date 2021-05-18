@@ -30,7 +30,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 
         String username = request.getParameter("username");
         if(exception instanceof BadCredentialsException){
-            int errorCnt = loginHistoryRepository.countLoginHistoryByUsername(username);
+            int errorCnt = loginHistoryRepository.countLoginHistoryByUsername(username, false);
             if(errorCnt <= 5){
                 LoginHistory loginHistory = LoginHistory.builder()
                         .username(username)

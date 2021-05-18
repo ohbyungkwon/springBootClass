@@ -2,10 +2,12 @@ package com.example.demo.batch;
 
 import org.springframework.batch.core.partition.support.Partitioner;
 import org.springframework.batch.item.ExecutionContext;
+import org.springframework.context.annotation.Profile;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Profile("!local")
 public class ItemCutClass implements Partitioner {
     String []category = {"food", "clothes", "beauty", "pet", "sport", "home", "car", "travel", "digital", "book"};
     @Override

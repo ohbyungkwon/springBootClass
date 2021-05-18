@@ -1,5 +1,7 @@
 package com.example.demo.batch.job;
 
+import com.example.demo.batch.ItemCutClass;
+import com.example.demo.batch.ProductItemProcessor;
 import com.example.demo.domain.Product;
 import com.example.demo.dto.elevenshop.ElevenProduct;
 import com.example.demo.dto.elevenshop.ProductSerachResponse;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -25,7 +28,7 @@ import java.util.List;
 
 @Configuration
 @EnableBatchProcessing
-@ConditionalOnProperty(name = "job.name", havingValue = "productInsertJob")
+@Profile("!local")
 public class ProductInsertJob {
     @Autowired
     private JobBuilderFactory jobBuilderFactory;

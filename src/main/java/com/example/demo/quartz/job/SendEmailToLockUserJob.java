@@ -14,6 +14,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
@@ -23,6 +24,7 @@ import java.util.List;
 
 @Slf4j
 @Component
+@Profile("!local")
 public class SendEmailToLockUserJob extends QuartzJobBean implements ApplicationContextAware {
     private ApplicationContext applicationContext;
 

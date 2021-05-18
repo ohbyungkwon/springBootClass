@@ -18,7 +18,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .mvcMatchers(HttpMethod.POST,"/users").permitAll()
+                .mvcMatchers(HttpMethod.POST,"/oauth/token").permitAll()
+                .mvcMatchers(HttpMethod.POST,"/user").permitAll()
                 .anyRequest()
                 .authenticated();
     }

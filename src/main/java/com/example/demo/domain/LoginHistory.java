@@ -9,6 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
@@ -18,7 +19,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(value = {AuditingEntityListener.class})
-public class LoginHistory {
+public class LoginHistory implements Serializable {
     @Column
     @Id
     @GeneratedValue
@@ -28,7 +29,7 @@ public class LoginHistory {
     private String username;
 
     @Column
-    private boolean isSuccess;
+    private Boolean isSuccess;
 
     @Column
     @CreatedDate
