@@ -19,7 +19,7 @@ public class JpaConfig {
     private DataSource dataSource;
 
     @Bean
-    public PlatformTransactionManager defaultTransactionManager(){
+    public PlatformTransactionManager transactionManager(){
         DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSource);
 
         transactionManager.setGlobalRollbackOnParticipationFailure(true);

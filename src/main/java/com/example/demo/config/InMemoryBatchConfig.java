@@ -21,7 +21,7 @@ import javax.annotation.PostConstruct;
 @Profile("!local")
 public class InMemoryBatchConfig implements BatchConfigurer {
     @Autowired
-    @Qualifier("defaultTransactionManager")
+    @Qualifier("transactionManager")
     private PlatformTransactionManager transactionManager;
 
     private JobRepository jobRepository;

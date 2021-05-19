@@ -36,6 +36,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-aop")
     compile("org.springframework.boot:spring-boot-starter-batch")
 
+    compile group:'net.logstash.logback', name:'logstash-logback-encoder', version:'5.1'
     compile group: 'joda-time', name: 'joda-time', version: '2.10.1'
     compile group: 'org.springframework.security', name: 'spring-security-core', version: '5.1.2.RELEASE'
     compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.4.RELEASE'

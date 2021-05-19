@@ -19,7 +19,7 @@ import javax.transaction.TransactionManager;
 @Component
 public class TransactionAspect {
     @Autowired
-    @Qualifier("defaultTransactionManager")
+    @Qualifier("transactionManager")
     private PlatformTransactionManager transactionManager;
 
     /*

@@ -21,7 +21,6 @@ public class CustomUsernamePasswordFilter extends UsernamePasswordAuthentication
 
     private HashMap<String, String> map;
 
-
     private String obtainPassword() {
         String passwordKey = super.getPasswordParameter();
         return map.get(passwordKey);
@@ -47,6 +46,7 @@ public class CustomUsernamePasswordFilter extends UsernamePasswordAuthentication
 
                 username = Optional.ofNullable(this.obtainUsername()).orElse("");
                 password = Optional.ofNullable(this.obtainPassword()).orElse("");
+                request.setAttribute("username", username);
             }catch (Exception e){
                 e.printStackTrace();
                 throw new CustAuthenticationException("파싱 오류.");

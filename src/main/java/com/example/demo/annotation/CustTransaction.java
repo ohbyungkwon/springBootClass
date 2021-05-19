@@ -8,6 +8,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CustTransaction {
-    String value() default "defaultTransactionManager";
+    String value() default "transactionManager";
     boolean isReadOnly() default false;
 }
