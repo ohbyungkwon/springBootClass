@@ -16,6 +16,8 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 import javax.sql.DataSource;
 
+/*
+* 아직 사용 안함
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter{
@@ -62,3 +64,4 @@ public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter{
                 .authenticationManager(authenticationManager);
     }
 }
+* */

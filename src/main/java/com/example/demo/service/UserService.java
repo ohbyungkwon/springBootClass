@@ -1,8 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.annotation.CustTransaction;
 import com.example.demo.domain.User;
-import com.example.demo.dto.ResponseComDto;
 import com.example.demo.dto.UserDto;
 import com.example.demo.exception.BadClientException;
 import com.example.demo.exception.DuplicateException;
@@ -10,12 +8,8 @@ import com.example.demo.exception.NonRecommandUser;
 import com.example.demo.repository.UserRepository;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.InternalException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import sun.security.util.Password;
-
-import java.util.List;
 
 @Service
 public class UserService {
@@ -37,7 +31,6 @@ public class UserService {
         return user;
     }
 
-    @CustTransaction
     public void createUser(UserDto.Create userDto){
         if(userRepository.findById(userDto.getId()) != null){
             throw new DuplicateException("아이디 중복");
@@ -67,7 +60,6 @@ public class UserService {
         }
     }
 
-    @CustTransaction
     public void updateUserPassword(UserDto.UpdatePassword userDto, String userId){
         User user = this.searchUser(userId);
         user.setPwd(userDto.getPwd());
@@ -77,7 +69,6 @@ public class UserService {
         }
     }
 
-    @CustTransaction
     public String updateUser(UserDto.Update userDto, String userId){
         User user = this.searchUser(userId);
 
@@ -101,7 +92,6 @@ public class UserService {
         return msg;
     }
 
-    @CustTransaction
     public void deleteUser(String userId){
         User user = this.searchUser(userId);
         userRepository.delete(user);

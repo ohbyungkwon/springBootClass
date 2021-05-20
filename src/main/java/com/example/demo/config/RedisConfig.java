@@ -13,7 +13,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 @Configuration
-@Profile("!local")
 public class RedisConfig {
     @Value("${spring.redis.host}")
     private String host;

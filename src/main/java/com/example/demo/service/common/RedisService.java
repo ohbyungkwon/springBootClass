@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-@Profile("!local")
 public class RedisService {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
@@ -19,24 +18,10 @@ public class RedisService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public Object getObject(String key) {
-        ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
-        return valueOperations.get(key);
-    }
 
     public String getString(String key) {
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
         return String.valueOf(Optional.ofNullable(valueOperations.get(key)).orElse(""));
-    }
-
-    public void setObject(String key, Object obj) {
-        ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
-        if(obj instanceof User) {
-            User user = objectMapper.convertValue(obj, User.class);
-            valueOperations.set(key, user);
-        } else {
-            valueOperations.set(key, obj);
-        }
     }
 
     public void setString(String key, String value) {

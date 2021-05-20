@@ -3,6 +3,7 @@ package com.example.demo.config;
 import com.example.demo.handler.CustomAuthenticationFailureHandler;
 import com.example.demo.handler.CustomAuthenticationSuccessHandler;
 import com.example.demo.security.CustomAuthenticationProvider;
+import com.example.demo.security.CustomJwtFilter;
 import com.example.demo.security.CustomUsernamePasswordFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private CustomAuthenticationFailureHandler failureHandler;
+
+    @Autowired
+    private CustomJwtFilter jwtFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -63,6 +67,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers("/login").permitAll();
 
         http.formLogin().disable();
-        http.addFilterAt(customUsernamePasswordFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterAt(customUsernamePasswordFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

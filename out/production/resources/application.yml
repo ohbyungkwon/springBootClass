@@ -27,6 +27,16 @@ spring:
       localhost
     port:
       6379
+
+token:
+  header: Authorization
+  signkey: secret
+
+redis:
+  gubun:
+    name: SHOP
+
 logging:
   level:
     root: info
+
