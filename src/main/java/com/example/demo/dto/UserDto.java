@@ -2,6 +2,7 @@ package com.example.demo.dto;
 
 import com.example.demo.domain.User;
 import com.example.demo.domain.enums.Gender;
+import com.example.demo.enums.Role;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
@@ -15,23 +16,23 @@ import java.util.regex.Pattern;
 public class UserDto {
     @Data
     public static class Create {
-        @NotEmpty(message = "id null")
         @Length(min=4, max = 8)
+        @NotEmpty(message = "id null")
         private String id;
 
-        @NotEmpty(message = "pwd null")
         @Length(min = 6)
+        @NotEmpty(message = "pwd null")
         private String pwd;
 
         @NotEmpty(message = "name null")
         private String name;
 
-        @NotEmpty(message = "email null")
         @Email
+        @NotEmpty(message = "email null")
         private String email;
 
-        @NotEmpty(message = "birth null")
         @Length(max = 6)
+        @NotEmpty(message = "birth null")
         private String birth;
 
         @NotEmpty(message = "addr null")
@@ -40,6 +41,8 @@ public class UserDto {
         private Gender gender;
 
         private String recommandUser;
+
+        private Role role;
     }
 
     @Data
@@ -54,5 +57,16 @@ public class UserDto {
         @NotEmpty(message = "pwd null")
         @Length(min = 4, max = 8)
         private String pwd;
+    }
+
+    @Data
+    public static class AuthEmail{
+        @Email
+        @NotEmpty(message = "email null")
+        private String email;
+
+        @Length(min = 6, max = 6)
+        @NotEmpty(message = "code null")
+        private String code;
     }
 }

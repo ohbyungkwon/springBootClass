@@ -41,7 +41,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new AccountExpiredException("계정이 비활성화 상태입니다.");
         }
 
-        return new UsernamePasswordAuthenticationToken(username, password, null);
+        return new UsernamePasswordAuthenticationToken(username, password, authentication.getAuthorities());
     }
 
     @Override

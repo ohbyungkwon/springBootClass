@@ -1,6 +1,7 @@
 package com.example.demo.domain;
 
 import com.example.demo.domain.enums.Gender;
+import com.example.demo.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -63,4 +64,7 @@ public class User implements Serializable {
 
     @Column
     private Boolean isEnable;
+
+    @Column
+    private Role role;
 }

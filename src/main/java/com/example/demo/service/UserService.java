@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.domain.User;
 import com.example.demo.dto.UserDto;
+import com.example.demo.enums.Role;
 import com.example.demo.exception.BadClientException;
 import com.example.demo.exception.DuplicateException;
 import com.example.demo.exception.NonRecommandUser;
@@ -10,6 +11,8 @@ import jdk.nashorn.internal.runtime.regexp.joni.exception.InternalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -32,18 +35,19 @@ public class UserService {
     }
 
     public void createUser(UserDto.Create userDto){
-        if(userRepository.findById(userDto.getId()) != null){
-            throw new DuplicateException("아이디 중복");
-        }//중복 아이디 검증
+        Optional.ofNullable(userRepository.findById(userDto.getId())).orElseThrow(() ->
+            new DuplicateException("아이디 중복")
+        );
 
         int point = 0;
         if(userDto.getRecommandUser() != null) {
-            User recommandUser = userRepository.findByRecommandUser(userDto.getRecommandUser());
-            if(recommandUser == null) throw new NonRecommandUser("추천 아이디 없음");
-
+            Optional.ofNullable(userRepository.findByRecommandUser(userDto.getRecommandUser())).orElseThrow(() ->
+                new NonRecommandUser("추천 아이디 없음")
+            );
             point += 1000;
         }
 
+        Role role = Optional.ofNullable(userDto.getRole()).orElse(Role.UNAUTHORIZATION_ROLE);
         User newUser = User.builder()
                 .id(userDto.getId())
                 .pwd(passwordEncoder.encode(userDto.getPwd()))
@@ -53,20 +57,17 @@ public class UserService {
                 .addr(userDto.getAddr())
                 .gender(userDto.getGender())
                 .point(point)
+                .role(role)
                 .build();
 
-        if(userRepository.save(newUser) == null){
-            throw new InternalException("계정생성에 실패하였습니다.");
-        }
+        userRepository.save(newUser);
     }
 
     public void updateUserPassword(UserDto.UpdatePassword userDto, String userId){
         User user = this.searchUser(userId);
         user.setPwd(userDto.getPwd());
 
-        if(userRepository.save(user) != null){
-            throw new InternalException("비밀번호 변경에 실패하였습니다.");
-        }
+        userRepository.save(user);
     }
 
     public String updateUser(UserDto.Update userDto, String userId){
@@ -85,9 +86,7 @@ public class UserService {
             msg = "계정이 잠겼습니다.";
         }
 
-        if(userRepository.save(user) != null){
-            throw new InternalException("본사로 문의 부탁드립니다.");
-        }
+        userRepository.save(user);
 
         return msg;
     }
