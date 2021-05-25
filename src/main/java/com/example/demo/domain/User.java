@@ -67,4 +67,5 @@ public class User implements Serializable {
 
     @Column
     private Role role;
+    //권한 하나만 가지고있음
 }
