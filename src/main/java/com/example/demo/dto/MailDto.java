@@ -16,10 +16,6 @@ public class MailDto {
 
     @Data
     public static class AuthEmail{
-        @Email
-        @NotEmpty(message = "email null")
-        private String email;
-
         @Length(min = 6, max = 6)
         @NotEmpty(message = "code null")
         private String code;

@@ -2,6 +2,7 @@ package com.example.demo.handler;
 
 import com.example.demo.domain.LoginHistory;
 import com.example.demo.dto.ResponseComDto;
+import com.example.demo.enums.Role;
 import com.example.demo.repository.LoginHistoryRepository;
 import com.example.demo.service.common.JwtTokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -60,14 +61,22 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             e.printStackTrace();
         }
 
+        String resultMsg = "로그인하였습니다.";
+        int statusCode = HttpStatus.OK.value();
+        if(authentication.getAuthorities().contains(Role.UNAUTHORIZATION_ROLE)){
+            resultMsg = "이메일 인증이 필요합니다.";
+            statusCode = HttpStatus.UNAUTHORIZED.value();
+            //해당 statusCode를 받고 clients는 이메일 인증 화면으로 전환 필요.
+        }
+
         String json = objectMapper.writeValueAsString(
                 ResponseComDto.builder()
-                        .resultMsg("로그인하였습니다.")
+                        .resultMsg(resultMsg)
                         .resultObj(authentication)
                         .build());
 
         PrintWriter out = response.getWriter();
-        response.setStatus(HttpStatus.OK.value());
+        response.setStatus(statusCode);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.setHeader(tokenHeader, token);
