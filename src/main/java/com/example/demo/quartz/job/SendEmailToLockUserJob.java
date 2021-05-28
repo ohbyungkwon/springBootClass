@@ -50,7 +50,10 @@ public class SendEmailToLockUserJob extends QuartzJobBean implements Application
             StopWatch stopWatch = new StopWatch();
 
             JobParametersBuilder jobParameters = new JobParametersBuilder();
-            jobParameters.addString("username", user.getId());
+            jobParameters.addString("id", user.getId());
+            jobParameters.addString("name", user.getName());
+            jobParameters.addString("email", user.getEmail());
+            jobParameters.addDate("lastLogined", user.getLastLogined());
             Job job = applicationContext.getBean("sendEmailToLockUserBatchJob", Job.class);
 
             try {
@@ -59,6 +62,9 @@ public class SendEmailToLockUserJob extends QuartzJobBean implements Application
                 JobExecution je = jobLauncher.run(job, jobParameters.toJobParameters());
                 Long result = je.getId();
                 context.setResult(result);
+
+                user.setIsEnable(false);
+                userRepository.save(user);
             } catch (Exception e){
                 e.printStackTrace();
             } finally {

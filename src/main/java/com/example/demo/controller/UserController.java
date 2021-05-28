@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.domain.User;
 import com.example.demo.dto.ResponseComDto;
 import com.example.demo.dto.UserDto;
-import com.example.demo.exception.BadClientException;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
