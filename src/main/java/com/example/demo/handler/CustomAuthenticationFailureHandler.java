@@ -31,7 +31,6 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
-
         String username = request.getParameter("username");
         String reqType = request.getHeader("Content-Type");
         if(reqType.equals(jsonType)) {

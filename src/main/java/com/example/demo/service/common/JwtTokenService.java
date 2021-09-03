@@ -70,6 +70,7 @@ public class JwtTokenService {
         Authentication authentication = null;
         Date lastAcccessTime = null;
         String username = null;
+        boolean isUsable = true;
 
         try {
             try {
@@ -94,15 +95,16 @@ public class JwtTokenService {
                     lastAcccessTime = new Date();
                 }
             } catch (Exception e){
-                e.printStackTrace();
+                isUsable = false;
             } finally {
                 setLastAccessTime(username, lastAcccessTime.toString());
             }
         } catch (Exception e) {
-            throw new CustAuthenticationException("토큰이 만료되었습니다.");
+            isUsable = false;
+            e.printStackTrace();
         }
 
-        return true;
+        return isUsable;
     }
 
     public void removeCacheInfo(String username) throws Exception {

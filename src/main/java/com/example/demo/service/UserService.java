@@ -27,17 +27,16 @@ public class UserService {
     }
 
     public User searchUser(String id){
-        User user =  userRepository.findById(id);
-        if(user == null){
-            throw new BadClientException("사용자 정보가 없습니다.");
-        }
-        return user;
+        return Optional.ofNullable(userRepository.findById(id)).orElseThrow(() ->
+                    new BadClientException("사용자 정보가 없습니다.")
+                );
     }
 
     public void createUser(UserDto.Create userDto){
-        Optional.ofNullable(userRepository.findById(userDto.getId())).orElseThrow(() ->
-            new DuplicateException("아이디 중복")
-        );
+        User user = userRepository.findById(userDto.getId());
+        if(user != null) {
+            throw new DuplicateException("아이디 중복");
+        }
 
         int point = 0;
         if(userDto.getRecommandUser() != null) {

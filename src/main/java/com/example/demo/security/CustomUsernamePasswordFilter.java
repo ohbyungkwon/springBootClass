@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,18 +19,6 @@ import java.util.stream.Collectors;
 
 public class CustomUsernamePasswordFilter extends UsernamePasswordAuthenticationFilter {
     private static final String jsonType = ContentType.APPLICATION_JSON.getMimeType();
-
-    private HashMap<String, String> map;
-
-    private String obtainPassword() {
-        String passwordKey = super.getPasswordParameter();
-        return map.get(passwordKey);
-    }
-
-    private String obtainUsername() {
-        String usernameKey = super.getUsernameParameter();
-        return map.get(usernameKey);
-    }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -42,10 +31,12 @@ public class CustomUsernamePasswordFilter extends UsernamePasswordAuthentication
         if(reqType.equals(jsonType)){
             ObjectMapper mapper = new ObjectMapper();
             try {
-                this.map = mapper.readValue(request.getReader().lines().collect(Collectors.joining()), new TypeReference<Map<String, String>>(){});
+                HashMap<String, String> map = mapper.readValue(request.getReader().lines().collect(Collectors.joining()), new TypeReference<Map<String, String>>(){});
+                String usernameKey = super.getUsernameParameter();;
+                String passwordKey = super.getPasswordParameter();
 
-                username = Optional.ofNullable(this.obtainUsername()).orElse("");
-                password = Optional.ofNullable(this.obtainPassword()).orElse("");
+                username = Optional.ofNullable(map.get(usernameKey)).orElse("");
+                password = Optional.ofNullable(map.get(passwordKey)).orElse("");
                 request.setAttribute("username", username);
             }catch (Exception e){
                 e.printStackTrace();

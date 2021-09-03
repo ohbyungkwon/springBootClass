@@ -33,7 +33,9 @@ public class CustomJwtFilter extends GenericFilterBean {
         String uri = req.getRequestURI();
         if(!uri.equals("/login")) {
             String token = req.getHeader(tokenHeader);
-            if (token != null) {
+            if (token == null) {
+                throw new CustAuthenticationException("잘못된 접근입니다.");
+            } else {
                 if (!jwtTokenService.isUsable(signKey, token)) {
                     throw new CustAuthenticationException("토큰 만료.");
                 }
