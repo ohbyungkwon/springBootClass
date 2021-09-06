@@ -35,13 +35,13 @@ public class UserService {
     }
 
     public void createUser(UserDto.Create userDto){
-        Optional.ofNullable(userRepository.findById(userDto.getId())).orElseThrow(() ->
-            new DuplicateException("아이디 중복")
-        );
+        if(userRepository.findById(userDto.getId()) != null) {
+            throw new DuplicateException("아이디 중복");
+        }
 
         int point = 0;
         if(userDto.getRecommandUser() != null) {
-            Optional.ofNullable(userRepository.findByRecommandUser(userDto.getRecommandUser())).orElseThrow(() ->
+            Optional.ofNullable(userRepository.findById(userDto.getRecommandUser())).orElseThrow(() ->
                 new NonRecommandUser("추천 아이디 없음")
             );
             point += 1000;

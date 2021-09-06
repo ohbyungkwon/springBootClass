@@ -64,8 +64,8 @@ public class MailSenderService {
             throw new BadClientException("인증 대상이 아닙니다.");
         }
 
-        String token = redisService.getString(username + gubun + "AUTH");
-        if(!token.equals(authEmail.getCode())){
+        String authCode = redisService.getString(username + gubun + "AUTH");
+        if(!authCode.equals(authEmail.getCode())){
             throw new BadClientException("인증번호를 확인해주세요.");
         }
 

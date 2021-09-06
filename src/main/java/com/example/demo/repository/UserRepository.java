@@ -10,9 +10,6 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findById(String id);
 
-    @Query("select u from User u where u.id=?1")
-    User findByRecommandUser(String id);
-
     @Query("select u from User u where u.lastLogined > ?1")
     List<User> findUsersByLastLogined(Date date);
 }

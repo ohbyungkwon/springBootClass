@@ -39,4 +39,3 @@ redis:
 logging:
   level:
     root: info
-
