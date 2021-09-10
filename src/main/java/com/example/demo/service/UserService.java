@@ -7,7 +7,6 @@ import com.example.demo.exception.BadClientException;
 import com.example.demo.exception.DuplicateException;
 import com.example.demo.exception.NonRecommandUser;
 import com.example.demo.repository.UserRepository;
-import jdk.nashorn.internal.runtime.regexp.joni.exception.InternalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,11 +26,9 @@ public class UserService {
     }
 
     public User searchUser(String id){
-        User user =  userRepository.findById(id);
-        if(user == null){
-            throw new BadClientException("사용자 정보가 없습니다.");
-        }
-        return user;
+        return Optional.ofNullable(userRepository.findById(id)).orElseThrow(() ->
+                    new BadClientException("사용자 정보가 없습니다.")
+                );
     }
 
     public void createUser(UserDto.Create userDto){

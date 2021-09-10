@@ -83,6 +83,5 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
         out.print(json);
         out.flush();
-
     }
 }

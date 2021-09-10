@@ -2,6 +2,7 @@ package com.example.demo.config;
 
 import com.example.demo.handler.CustomAuthenticationFailureHandler;
 import com.example.demo.handler.CustomAuthenticationSuccessHandler;
+import com.example.demo.security.CustomAuthenticationEntryPoint;
 import com.example.demo.security.CustomAuthenticationProvider;
 import com.example.demo.security.CustomJwtFilter;
 import com.example.demo.security.CustomUsernamePasswordFilter;
@@ -15,12 +16,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    private final static String loginUrl = "/login";
 
     @Autowired
     private CustomAuthenticationProvider authenticationProvider;
@@ -33,6 +33,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private CustomJwtFilter jwtFilter;
+
+    @Autowired
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -48,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public CustomUsernamePasswordFilter customUsernamePasswordFilter() throws Exception{
         CustomUsernamePasswordFilter filter = new CustomUsernamePasswordFilter();
-        filter.setFilterProcessesUrl("/login");
+        filter.setFilterProcessesUrl(loginUrl);
         filter.setAuthenticationManager(authenticationManagerBean());
         filter.setAuthenticationSuccessHandler(successHandler);
         filter.setAuthenticationFailureHandler(failureHandler);
@@ -63,12 +66,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .cors().disable()
-                .authorizeRequests().antMatchers("/login").permitAll();
-
+                .cors()
+                .disable()
+                .authorizeRequests()
+                .antMatchers(loginUrl).permitAll()
+                .anyRequest().authenticated()
+                        .and()
+                                .exceptionHandling()
+                                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                                                .and()
+                                                        .addFilterBefore(jwtFilter, CustomUsernamePasswordFilter.class);
         http.formLogin().disable();
-
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-            .addFilterAt(customUsernamePasswordFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }
