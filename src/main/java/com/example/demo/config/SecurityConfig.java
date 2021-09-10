@@ -2,10 +2,7 @@ package com.example.demo.config;
 
 import com.example.demo.handler.CustomAuthenticationFailureHandler;
 import com.example.demo.handler.CustomAuthenticationSuccessHandler;
-import com.example.demo.security.CustomAuthenticationEntryPoint;
-import com.example.demo.security.CustomAuthenticationProvider;
-import com.example.demo.security.CustomJwtFilter;
-import com.example.demo.security.CustomUsernamePasswordFilter;
+import com.example.demo.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +32,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private CustomJwtFilter jwtFilter;
 
     @Autowired
-    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private CustomExceptionFilter customExceptionFilter;
+
+    @Autowired
+    private CustomAccessDeniedHandler customAccessDeniedHandler;
+
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -71,11 +72,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(loginUrl).permitAll()
                 .anyRequest().authenticated()
-                        .and()
-                                .exceptionHandling()
-                                        .authenticationEntryPoint(customAuthenticationEntryPoint)
-                                                .and()
-                                                        .addFilterBefore(jwtFilter, CustomUsernamePasswordFilter.class);
+                .and()
+                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
+                .and().addFilterBefore(jwtFilter, CustomUsernamePasswordFilter.class)
+//                .addFilterAt(customUsernamePasswordFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(customExceptionFilter, CustomJwtFilter.class);
+
         http.formLogin().disable();
     }
 }

@@ -44,6 +44,8 @@ public class JwtTokenService {
                 .signWith(SignatureAlgorithm.HS256, signKey)
                 .compact();
 
+        redisService.setString(authentication.getPrincipal() + gubun + "TOKEN", token);
+
         return token;
     }
 
@@ -73,12 +75,12 @@ public class JwtTokenService {
         boolean isUsable = true;
 
         try {
+            claims = getClaims(signKey, token);
+            authentication = this.getLoginUser(claims.getBody());
+            username = authentication.getPrincipal().toString();
+            lastAcccessTime = new Date();
+        } catch(ExpiredJwtException e) {
             try {
-                claims = getClaims(signKey, token);
-                authentication = this.getLoginUser(claims.getBody());
-                username = authentication.getPrincipal().toString();
-                lastAcccessTime = new Date();
-            } catch(ExpiredJwtException e) {
                 //token 만료되어도 계속 동작이 있었는지 체크(Session Sliding)
                 authentication = this.getLoginUser(e.getClaims());
                 username = authentication.getPrincipal().toString();
@@ -87,22 +89,24 @@ public class JwtTokenService {
                 lastAcccessTime = DateTime.parse(redisService.getString(username + gubun + "TIME")).toDate();
 
                 //30분 동안 동작이 없었을 때 or 토큰만료 시간이 하루 이상 지날 떄
-                if(currentDate.minusMinutes(30).toDate().compareTo(lastAcccessTime) > 0 ||
+                if (currentDate.minusMinutes(30).toDate().compareTo(lastAcccessTime) > 0 ||
                         new DateTime(e.getClaims().getExpiration()).plusDays(1).isBeforeNow()) {
                     this.removeCacheInfo(username);
-                    return false;
+                    isUsable = false;
                 } else {
                     lastAcccessTime = new Date();
                 }
-            } catch (Exception e){
+            } catch (Exception e1){
                 isUsable = false;
-            } finally {
-                setLastAccessTime(username, lastAcccessTime.toString());
+                e1.printStackTrace();
             }
-        } catch (Exception e) {
+        } catch (Exception e2){
             isUsable = false;
-            e.printStackTrace();
+            e2.printStackTrace();
         }
+
+        if(isUsable)
+            setLastAccessTime(username, lastAcccessTime.toString());
 
         return isUsable;
     }

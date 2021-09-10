@@ -1,9 +1,7 @@
 package com.example.demo.service.common;
 
-import com.example.demo.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
@@ -14,10 +12,6 @@ import java.util.Optional;
 public class RedisService {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
 
     public String getString(String key) {
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
