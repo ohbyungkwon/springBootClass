@@ -35,7 +35,7 @@ public class Product {
     private String imageUrl;
 
     @Column
-    private String optional;
+    private String memo;
 
     @Column
     @CreatedDate
