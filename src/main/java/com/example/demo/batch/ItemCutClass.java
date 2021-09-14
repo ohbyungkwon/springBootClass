@@ -14,7 +14,7 @@ public class ItemCutClass implements Partitioner {
     public Map<String, ExecutionContext> partition(int gridSize) {
         Map<String, ExecutionContext> result = new HashMap<>();
 
-        for(int i =0 ; i< gridSize; i++){
+        for(int i =0 ; i < gridSize; i++){
             ExecutionContext value = new ExecutionContext();
             value.putInt("index", i);
             value.putInt("gridSize", gridSize);

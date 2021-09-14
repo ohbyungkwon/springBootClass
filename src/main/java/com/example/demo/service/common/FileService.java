@@ -34,7 +34,7 @@ public class FileService {
             throw new BadClientException("경로가 존재하지 않습니다.");
         }
 
-        File fileInfo = new File(uploadPath, filename + RandomString.make()).;
+        File fileInfo = new File(uploadPath, filename + RandomString.make());
 
         file.transferTo(fileInfo);
     }

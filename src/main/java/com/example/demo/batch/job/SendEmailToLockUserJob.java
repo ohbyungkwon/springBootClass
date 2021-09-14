@@ -1,6 +1,6 @@
 package com.example.demo.batch.job;
 
-import com.example.demo.repository.UserRepository;
+import com.example.demo.service.common.RedisService;
 import com.example.demo.utils.MailUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ExitStatus;
@@ -8,7 +8,6 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.*;
 import org.springframework.batch.core.step.tasklet.Tasklet;
-import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +33,7 @@ public class SendEmailToLockUserJob {
     private StepBuilderFactory stepBuilderFactory;
 
     @Autowired
-    private UserRepository userRepository;
+    private RedisService redisService;
 
     @Bean
     public Job sendEmailJob() {
@@ -91,8 +90,6 @@ public class SendEmailToLockUserJob {
                                         @Value("#{jobParameters[email]}") String email,
                                         @Value("#{jobParameters[lastLogined]}") Date lastLogined) {
         return ((contribution, chunkContext) -> {
-            ExecutionContext context = chunkContext.getStepContext().getStepExecution().getJobExecution().getExecutionContext();
-
             String subject = "휴명 계정 전환 공지";
             String content = id + "(" + name + ") 님 안녕하세요." +
                     "보안 정책에 의해 90일 이상 접속하지 않아 " + id + "계정이 잠금되었습니다." +
@@ -104,7 +101,7 @@ public class SendEmailToLockUserJob {
             mailUtil.setToEmail(email);
             mailUtil.setToEmail(fromEmail);
 
-            context.put("emailContent", mailUtil);
+            redisService.setObject("emailContent", mailUtil);
 
             return RepeatStatus.FINISHED;
         });
@@ -114,8 +111,7 @@ public class SendEmailToLockUserJob {
     @StepScope
     public Tasklet sendEmailUserStepTask(){
         return ((contribution, chunkContext) -> {
-            ExecutionContext context = chunkContext.getStepContext().getStepExecution().getJobExecution().getExecutionContext();
-            MailUtil mailUtil = (MailUtil) context.get("emailContent");
+            MailUtil mailUtil = (MailUtil) redisService.getObject("emailContent");
 
             if(mailUtil == null){
                 contribution.setExitStatus(ExitStatus.FAILED);
@@ -132,8 +128,7 @@ public class SendEmailToLockUserJob {
     public Tasklet sendEmailAdminStepTask(@Value("#{jobParameters[id]}") String id,
                                           @Value("#{jobParameters[email]}") String email){
         return ((contribution, chunkContext) -> {
-            ExecutionContext context = chunkContext.getStepContext().getStepExecution().getJobExecution().getExecutionContext();
-            MailUtil mailUtil = (MailUtil) context.get("emailContent");
+            MailUtil mailUtil = (MailUtil) redisService.getObject("emailContent");
             if(mailUtil == null){
                 contribution.setExitStatus(ExitStatus.FAILED);
                 return RepeatStatus.FINISHED;

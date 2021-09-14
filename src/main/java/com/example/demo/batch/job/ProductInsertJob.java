@@ -52,7 +52,7 @@ public class ProductInsertJob {
                 .build();
     }
 
-    public Step setMasterStep(){
+    private Step setMasterStep(){
         return stepBuilderFactory.get("masterStep")
                 .partitioner(setSlaveStep())
                 .partitioner("slaveStep", new ItemCutClass())

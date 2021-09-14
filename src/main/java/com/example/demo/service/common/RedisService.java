@@ -23,6 +23,16 @@ public class RedisService {
         valueOperations.set(key, value);
     }
 
+    public Object getObject(String key) {
+        ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
+        return Optional.ofNullable(valueOperations.get(key)).orElse(new Object());
+    }
+
+    public void setObject(String key, Object obj) {
+        ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
+        valueOperations.set(key, obj);
+    }
+
     public void removeKey(String key) {
         redisTemplate.delete(key);
     }

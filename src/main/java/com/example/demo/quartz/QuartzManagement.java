@@ -31,11 +31,11 @@ public class QuartzManagement {
         }
     }
 
-    public Trigger buildJobTrigger(String scheduleExp) {
+    private Trigger buildJobTrigger(String scheduleExp) {
         return TriggerBuilder.newTrigger().withSchedule(CronScheduleBuilder.cronSchedule(scheduleExp)).build();
     }
 
-    public JobDetail buildJobDetail(Class job, String name, String group) {
+    private JobDetail buildJobDetail(Class job, String name, String group) {
         return JobBuilder.newJob(job).withIdentity(name, group).build();
     }
 }

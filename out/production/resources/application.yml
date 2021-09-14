@@ -39,3 +39,9 @@ redis:
 logging:
   level:
     root: info
+
+file:
+  download:
+    path: /Users/obyeong-gwon/downloads/excel
+  upload:
+    path: /Users/obyeong-gwon/downloads/excel/tmp
