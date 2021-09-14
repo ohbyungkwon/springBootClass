@@ -1,6 +1,7 @@
 package com.example.demo.security;
 
 import com.example.demo.dto.ResponseComDto;
+import com.example.demo.exception.CustAuthenticationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,10 @@ public class CustomExceptionFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try{
             filterChain.doFilter(request, response);
+        } catch (CustAuthenticationException ex){
+            setErrorResponse(HttpStatus.UNAUTHORIZED, response, ex);
+        } catch(RuntimeException ex){
+            setErrorResponse(HttpStatus.BAD_REQUEST, response, ex);
         } catch (Exception ex){
             setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, ex);
         }

@@ -6,6 +6,7 @@ import com.example.demo.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -67,16 +68,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .cors()
-                .disable()
+                .cors().disable()
                 .authorizeRequests()
                 .antMatchers(loginUrl).permitAll()
+                .antMatchers(HttpMethod.GET,"/products").permitAll()
+                .antMatchers(HttpMethod.POST,"/products").hasRole("ADMIN_ROLE")
+                .antMatchers(HttpMethod.PUT,"/products").hasRole("ADMIN_ROLE")
+                .antMatchers(HttpMethod.DELETE,"/products").hasRole("ADMIN_ROLE")
                 .anyRequest().authenticated()
                 .and()
-                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
-                .and().addFilterBefore(jwtFilter, CustomUsernamePasswordFilter.class)
-//                .addFilterAt(customUsernamePasswordFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(customExceptionFilter, CustomJwtFilter.class);
+                .addFilterBefore(jwtFilter, CustomUsernamePasswordFilter.class)
+                .addFilterBefore(customExceptionFilter, CustomJwtFilter.class)
+                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler);
 
         http.formLogin().disable();
     }

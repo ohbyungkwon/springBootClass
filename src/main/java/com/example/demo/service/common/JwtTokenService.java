@@ -1,6 +1,5 @@
 package com.example.demo.service.common;
 
-import com.example.demo.exception.CustAuthenticationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

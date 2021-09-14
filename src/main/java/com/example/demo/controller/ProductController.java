@@ -45,9 +45,7 @@ public class ProductController extends AbstractController {
     }
 
     @PostMapping("/upload/excel")
-    public ResponseEntity<ResponseComDto> uploadExcel(MultipartFile file, Principal principal) throws Exception{
-        String username = this.getUsername(principal);
-
+    public ResponseEntity<ResponseComDto> uploadExcel(MultipartFile file) throws Exception{
         fileService.uploadFile(file);
 
         return new ResponseEntity<ResponseComDto>(
@@ -57,17 +55,14 @@ public class ProductController extends AbstractController {
                 .build(), HttpStatus.OK);
     }
 
-//    @PostConstruct("/upload/products")
-//    public ResponseEntity<ResponseComDto> uploadProductByExcel(MultipartFile products, Principal principal){
-//        String username = this.getUsername(principal);
-//
-//
-//    }
-
-//    @PostMapping("/products/")
-//    public ResponseEntity<?> createProduct(){
-//
-//    }
+    @PostMapping("/products")
+    public ResponseEntity<?> createProduct(){
+        return new ResponseEntity<ResponseComDto>(
+                ResponseComDto.builder()
+                        .resultMsg("test")
+                        .resultObj(null)
+                        .build(), HttpStatus.OK);
+    }
 //
 //    @PutMapping("/products/{id}")
 //    public ResponseEntity<?> updateProduct(@PathVariable Long id){
