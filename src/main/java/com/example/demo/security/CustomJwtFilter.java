@@ -5,17 +5,16 @@ import com.example.demo.service.common.JwtTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class CustomJwtFilter extends GenericFilterBean {
+public class CustomJwtFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtTokenService jwtTokenService;
@@ -27,21 +26,17 @@ public class CustomJwtFilter extends GenericFilterBean {
     private String signKey;
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest req = (HttpServletRequest) request;
-
-        String uri = req.getRequestURI();
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String uri = request.getRequestURI();
         if(!uri.equals("/login")) {
-            String token = req.getHeader(tokenHeader);
-            if (token == null) {
-                throw new CustAuthenticationException("잘못된 접근입니다.");
-            } else {
+            String token = request.getHeader(tokenHeader);
+            if (token != null) {
                 if (!jwtTokenService.isUsable(signKey, token)) {
                     throw new CustAuthenticationException("토큰 만료.");
                 }
             }
         }
 
-        chain.doFilter(request, response);
+        filterChain.doFilter(request, response);
     }
 }

@@ -25,7 +25,12 @@ public class RedisConfig {
     @PostConstruct
     public void startServer() {
         redisServer = new RedisServer(port);
-        redisServer.start();
+        try {
+            redisServer.start();
+        } catch (Exception e){
+            redisServer.stop();
+            redisServer.start();
+        }
     }
 
     @PreDestroy

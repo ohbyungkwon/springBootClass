@@ -8,9 +8,14 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class ApplicationConfig {
+public class ApplicationConfig implements WebMvcConfigurer {
+
+    private final long MAX_AGE_SECS = 3600;
+
     @Bean
     public RestTemplate restTemplate(){
         HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
@@ -31,5 +36,16 @@ public class ApplicationConfig {
         threadPoolTaskExecutor.setMaxPoolSize(30);
         threadPoolTaskExecutor.setCorePoolSize(20);
         return threadPoolTaskExecutor;
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry
+                .addMapping("**") //CORS 적용할 URL 패턴
+                .allowedOrigins("*") //자원 공유 오리진 지정
+                .allowedMethods("GET","POST","PUT","PATCH","DELETE","OPTIONS") //요청 허용 메서드
+                .allowedHeaders("*") //요청 허용 헤더
+                .allowCredentials(true) //요청 허용 쿠키
+                .maxAge(MAX_AGE_SECS);
     }
 }

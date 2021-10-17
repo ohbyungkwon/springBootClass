@@ -32,7 +32,7 @@ public class ProductController extends AbstractController {
 
     @GetMapping("/download/excel/{filename}")
     public ModelAndView downloadExcel(@PathVariable String filename, Principal principal){
-        String username = this.getUsername(principal);
+        String username = this.getUsername(principal).getId();
 
         File file = fileService.getFile(filename);
 

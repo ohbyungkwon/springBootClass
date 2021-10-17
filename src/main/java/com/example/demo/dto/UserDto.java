@@ -49,8 +49,8 @@ public class UserDto {
 
     @Data
     public static class UpdatePassword{
-        @NotEmpty(message = "pwd null")
+        @NotEmpty(message = "pw null")
         @Length(min = 4, max = 8)
-        private String pwd;
+        private String pw;
     }
 }

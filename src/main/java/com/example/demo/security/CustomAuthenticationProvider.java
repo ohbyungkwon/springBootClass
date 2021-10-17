@@ -23,7 +23,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        UserDetails userDetails = userDetailService.loadUserByUsername(username);
+        CustomUserDetails userDetails = (CustomUserDetails) userDetailService.loadUserByUsername(username);
         if(!passwordEncoder.matches(password, userDetails.getPassword())){
             throw new BadCredentialsException("비밀번호가 다릅니다.");
         }
@@ -40,7 +40,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new AccountExpiredException("계정이 비활성화 상태입니다.");
         }
 
-        return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
     }
 
     @Override

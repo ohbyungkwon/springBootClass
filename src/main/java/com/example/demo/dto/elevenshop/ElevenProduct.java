@@ -45,7 +45,7 @@ public class ElevenProduct {
     private int reviewCount;
 
     @XmlElement(name = "BuySatisfy")
-    private int buySatistfy;
+    private int BuySatisfy;
 
     @XmlElement(name = "Benefit")
     private Benefit benefit;

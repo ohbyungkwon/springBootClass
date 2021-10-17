@@ -24,7 +24,7 @@ public class UserController extends AbstractController{
 
     @GetMapping("/users/me")
     public ResponseEntity<?> searchUser(Principal principal){
-        User user = userService.searchUser(principal.getName());
+        User user = this.getUsername(principal);
 
         return new ResponseEntity<ResponseComDto>(
                 ResponseComDto.builder()

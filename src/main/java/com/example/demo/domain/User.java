@@ -1,7 +1,9 @@
 package com.example.demo.domain;
 
 import com.example.demo.domain.enums.Gender;
+import com.example.demo.enums.AuthProvider;
 import com.example.demo.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,7 +33,7 @@ public class User implements Serializable {
     private String id;
 
     @Column
-    private String pwd;
+    private String pw;
 
     @Column
     private String name;
@@ -66,6 +68,16 @@ public class User implements Serializable {
     private Boolean isEnable;
 
     @Column
-    private Role role;
-    //권한 하나만 가지고있음
+    @Enumerated(EnumType.ORDINAL)
+    private Role role;//권한 하나만 가지고있음
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
+
+    @Column
+    private String accessToken;
+
+    @Column
+    private String refreshToken;
 }

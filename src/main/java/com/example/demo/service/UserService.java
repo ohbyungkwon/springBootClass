@@ -47,7 +47,7 @@ public class UserService {
         Role role = Optional.ofNullable(userDto.getRole()).orElse(Role.UNAUTHORIZATION_ROLE);
         User newUser = User.builder()
                 .id(userDto.getId())
-                .pwd(passwordEncoder.encode(userDto.getPwd()))
+                .pw(passwordEncoder.encode(userDto.getPwd()))
                 .name(userDto.getName())
                 .email(userDto.getEmail())
                 .birth(userDto.getBirth())
@@ -62,7 +62,7 @@ public class UserService {
 
     public void updateUserPassword(UserDto.UpdatePassword userDto, String userId){
         User user = this.searchUser(userId);
-        user.setPwd(userDto.getPwd());
+        user.setPw(userDto.getPw());
 
         userRepository.save(user);
     }

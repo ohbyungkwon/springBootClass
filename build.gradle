@@ -27,7 +27,7 @@ repositories {
 dependencies {
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
     implementation('org.springframework.boot:spring-boot-starter-web')
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+//    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-quartz:2.2.2.RELEASE'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.3.4.RELEASE'
@@ -44,11 +44,16 @@ dependencies {
     compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.9.RELEASE'
     compile group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
 
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.5.0'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.5.0'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'
 
     compile('mysql:mysql-connector-java')
     compileOnly('org.projectlombok:lombok')
+    compileOnly('org.springframework.boot:spring-boot-configuration-processor')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
 }

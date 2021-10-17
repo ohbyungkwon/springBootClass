@@ -1,5 +1,6 @@
 package com.example.demo.service.common;
 
+import com.example.demo.security.CustomUserDetails;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -10,7 +11,6 @@ import org.codehaus.jettison.json.JSONObject;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +32,8 @@ public class JwtTokenService {
     private String gubun;
 
     public String generateToken(String signKey, Authentication authentication) throws Exception {
-        String subject = objectMapper.writeValueAsString(authentication);
+        CustomUserDetails userDetails = ((CustomUserDetails) authentication.getPrincipal());
+        String subject = objectMapper.writeValueAsString(userDetails);
         DateTime currentDate = new DateTime();
 
         String token = Jwts.builder()
@@ -43,46 +44,28 @@ public class JwtTokenService {
                 .signWith(SignatureAlgorithm.HS256, signKey)
                 .compact();
 
-        redisService.setString(authentication.getPrincipal() + gubun + "TOKEN", token);
-
+        String username = userDetails.getUsername();
+        redisService.setString(username + gubun + "TOKEN", token);
         return token;
-    }
-
-    public Jws<Claims> getClaims(String signKey, String token) throws Exception {
-        return Jwts.parser().setSigningKey(signKey).parseClaimsJws(token);
-    }
-
-    public Authentication getLoginUser(Claims claims) throws Exception{
-        JSONObject object = new JSONObject(claims.getSubject());
-        return new UsernamePasswordAuthenticationToken(object.get("principal"), object.get("credentials"), null);
-    }
-
-    public void setLastAccessTime(String username, String newDate) {
-        try {
-            redisService.setString(username + gubun + "TIME", newDate);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
     public boolean isUsable(String signKey, String token){
         Jws<Claims> claims = null;
-        Authentication authentication = null;
+        JSONObject userInfo = null;
         Date lastAcccessTime = null;
+
         String username = null;
         boolean isUsable = true;
-
         try {
-            claims = getClaims(signKey, token);
-            authentication = this.getLoginUser(claims.getBody());
-            username = authentication.getPrincipal().toString();
+            claims = this.getClaims(signKey, token);
+            userInfo = this.getLoginUserInfo(claims.getBody());
+            username = (String) userInfo.get("username");
             lastAcccessTime = new Date();
         } catch(ExpiredJwtException e) {
             try {
                 //token 만료되어도 계속 동작이 있었는지 체크(Session Sliding)
-                authentication = this.getLoginUser(e.getClaims());
-                username = authentication.getPrincipal().toString();
+                userInfo = this.getLoginUserInfo(e.getClaims());
+                username = (String) userInfo.get("username");
 
                 DateTime currentDate = new DateTime();
                 lastAcccessTime = DateTime.parse(redisService.getString(username + gubun + "TIME")).toDate();
@@ -110,7 +93,24 @@ public class JwtTokenService {
         return isUsable;
     }
 
-    public void removeCacheInfo(String username) throws Exception {
+    private Jws<Claims> getClaims(String signKey, String token) throws Exception {
+        return Jwts.parser().setSigningKey(signKey).parseClaimsJws(token);
+    }
+
+    private JSONObject getLoginUserInfo(Claims claims) throws Exception{
+        return new JSONObject(claims.getSubject());
+    }
+
+    private void setLastAccessTime(String username, String newDate) {
+        try {
+            redisService.setString(username + gubun + "TIME", newDate);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    private void removeCacheInfo(String username) throws Exception {
         redisService.removeKey(username + gubun + "TOKEN");  // Current Token 삭제
         redisService.removeKey(username + gubun + "TIME"); // Access Time 삭제
     }

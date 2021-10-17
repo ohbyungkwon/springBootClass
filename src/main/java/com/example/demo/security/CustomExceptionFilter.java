@@ -35,7 +35,7 @@ public class CustomExceptionFilter extends OncePerRequestFilter {
         }
     }
 
-    public void setErrorResponse(HttpStatus status, HttpServletResponse response, Throwable ex){
+    private void setErrorResponse(HttpStatus status, HttpServletResponse response, Throwable ex){
         log.info("errCode: {}, message: {}", status, ex.getMessage());
         response.setStatus(status.value());
         response.setContentType("application/json");

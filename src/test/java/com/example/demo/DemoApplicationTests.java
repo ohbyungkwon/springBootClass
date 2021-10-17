@@ -1,6 +1,6 @@
 //package com.example.demo;
 //
-//import com.example.demo.dto.elevenshop.ProductSerachResponse;
+//import com.example.demo.dto.elevenshop.ProductSearchResponse;
 //import com.example.demo.service.ProductService;
 //import org.junit.Test;
 //import org.junit.runner.RunWith;
