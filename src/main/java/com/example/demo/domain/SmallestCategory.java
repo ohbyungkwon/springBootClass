@@ -1,6 +1,5 @@
 package com.example.demo.domain;
 
-import com.sun.javafx.beans.IDProperty;
 import lombok.Data;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 

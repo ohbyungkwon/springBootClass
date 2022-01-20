@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 @Component
-@Profile("!local")
+@Profile("prod")
 public class QuartzManagement {
     @Autowired
     private Scheduler scheduler;

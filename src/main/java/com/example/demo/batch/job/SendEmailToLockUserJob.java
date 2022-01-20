@@ -21,7 +21,7 @@ import java.util.Date;
 @Slf4j
 @Configuration
 @EnableBatchProcessing
-@Profile("!local")
+@Profile("prod")
 public class SendEmailToLockUserJob {
     @Value("$(mail.smtp.username)")
     private String fromEmail;

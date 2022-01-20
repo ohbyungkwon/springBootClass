@@ -34,7 +34,7 @@ public class MailSenderService {
     @CustTransaction
     public void sendMailToAuth(Object mailDto, Principal principal) throws Exception{
         String username = principal.getName();
-        User user = userRepository.findById(username);
+        User user = userRepository.findByUsername(username).get();
 
         String authCode = UUID.randomUUID().toString().substring(0, 10);
 
@@ -59,7 +59,7 @@ public class MailSenderService {
     @CustTransaction
     public void checkAuthCode(MailDto.AuthEmail authEmail, Principal principal) throws Exception{
         String username = principal.getName();
-        User user = userRepository.findById(username);
+        User user = userRepository.findByUsername(username).get();
         if(user.getRole() != Role.UNAUTHORIZATION_ROLE){
             throw new BadClientException("인증 대상이 아닙니다.");
         }

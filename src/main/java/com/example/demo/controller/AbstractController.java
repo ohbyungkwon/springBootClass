@@ -18,7 +18,6 @@ public class AbstractController {
 
     protected User getUsername(Principal principal){
         CustomUserDetails customUserDetails = (CustomUserDetails) ((Authentication) principal).getPrincipal();
-        User user = userRepository.findById(customUserDetails.getUsername());
-        return user;
+        return userRepository.findByUsername(customUserDetails.getUsername()).get();
     }
 }

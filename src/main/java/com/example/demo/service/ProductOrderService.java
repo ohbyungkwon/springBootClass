@@ -35,7 +35,7 @@ public class ProductOrderService {
     public ProductOrder saveOrder(OrderDto.Create dto, String loginedUser){
         Product product = productRepository.findProductById(dto.getSeqProduct());
 
-        User user = userRepository.findById(loginedUser);
+        User user = userRepository.findByUsername(loginedUser).get();
 
         if(dto.getUsePoint() > user.getPoint()){
             throw new BadClientException("포인트 부족");

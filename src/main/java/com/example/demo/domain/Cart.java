@@ -26,7 +26,7 @@ public class Cart {
     private Product product;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="user_id", referencedColumnName = "seq")
+    @JoinColumn(name="user_id", referencedColumnName = "id")
     private User user;
 
     @CreatedDate

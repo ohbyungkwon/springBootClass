@@ -18,7 +18,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.annotation.PostConstruct;
 
 @Configuration
-@Profile("!local")
+@Profile("prod")
 public class InMemoryBatchConfig implements BatchConfigurer {
     @Autowired
     @Qualifier("transactionManager")

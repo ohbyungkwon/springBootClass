@@ -25,7 +25,7 @@ public class Question {
     @Column
     private Date createDate;
 
-    @JoinColumn(name = "user_id", referencedColumnName = "seq")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(cascade = CascadeType.ALL)
     private User user;
 

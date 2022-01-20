@@ -29,7 +29,7 @@ import java.util.List;
 @Configuration
 @EnableBatchProcessing
 @Slf4j
-@Profile("!local")
+@Profile("prod")
 public class ProductInsertJob {
     @Autowired
     private JobBuilderFactory jobBuilderFactory;

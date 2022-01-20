@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final static String loginUrl = "/login";
+    private final static String singUpUrl = "/user";
     private final static String authUrl = "/auth/**";
     private final static String auth2Url = "/oauth2/**";
 
@@ -85,6 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     "/favicon.ico",
                     "/h2-console/**").permitAll()
             .antMatchers(loginUrl, authUrl, auth2Url).permitAll()
+            .antMatchers(HttpMethod.POST, singUpUrl).permitAll()
             .antMatchers(HttpMethod.GET,"/products").permitAll()
             .antMatchers(HttpMethod.POST,"/products").hasRole("ADMIN_ROLE")
             .antMatchers(HttpMethod.PUT,"/products").hasRole("ADMIN_ROLE")

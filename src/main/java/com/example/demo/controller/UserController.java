@@ -3,22 +3,25 @@ package com.example.demo.controller;
 import com.example.demo.domain.User;
 import com.example.demo.dto.ResponseComDto;
 import com.example.demo.dto.UserDto;
+import com.example.demo.exception.BadClientException;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 public class UserController extends AbstractController{
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
-    UserController(UserService userService){
+    public UserController(UserService userService){
         this.userService = userService;
     }
 
@@ -36,7 +39,8 @@ public class UserController extends AbstractController{
     @PostMapping("/user")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserDto.Create userDto, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return ResponseEntity.badRequest().build();
+            List<ObjectError> errList = bindingResult.getAllErrors();
+            throw new BadClientException(errList.get(0).getDefaultMessage());
         }
 
         userService.createUser(userDto);
@@ -52,7 +56,8 @@ public class UserController extends AbstractController{
     public ResponseEntity<?> updateUser(Principal principal, @Valid @RequestBody UserDto.Update userDto,
                                                 BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return ResponseEntity.badRequest().build();
+            List<ObjectError> errList = bindingResult.getAllErrors();
+            throw new BadClientException(errList.get(0).getDefaultMessage());
         }
 
         String msg = userService.updateUser(userDto, principal.getName());
@@ -64,11 +69,12 @@ public class UserController extends AbstractController{
                         .build(), HttpStatus.OK);
     }//계정 수정
 
-    @PutMapping("/user/pw")
+    @PutMapping("/user/password")
     public ResponseEntity<?> updateUserPassword(Principal principal, @Valid @RequestBody UserDto.UpdatePassword userDto,
                                         BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return ResponseEntity.badRequest().build();
+            List<ObjectError> errList = bindingResult.getAllErrors();
+            throw new BadClientException(errList.get(0).getDefaultMessage());
         }
 
         userService.updateUserPassword(userDto, principal.getName());

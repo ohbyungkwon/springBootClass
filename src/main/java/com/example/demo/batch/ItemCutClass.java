@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Profile;
 import java.util.HashMap;
 import java.util.Map;
 
-@Profile("!local")
+@Profile("prod")
 public class ItemCutClass implements Partitioner {
     String []category = {"food", "clothes", "beauty", "pet", "sport", "home", "car", "travel", "digital", "book"};
     @Override

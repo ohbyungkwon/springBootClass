@@ -24,7 +24,7 @@ import java.util.List;
 
 @Slf4j
 @Component
-@Profile("!local")
+@Profile("prod")
 public class SendEmailToLockUserJob extends QuartzJobBean implements ApplicationContextAware {
     private ApplicationContext applicationContext;
 
@@ -50,10 +50,10 @@ public class SendEmailToLockUserJob extends QuartzJobBean implements Application
             StopWatch stopWatch = new StopWatch();
 
             JobParametersBuilder jobParameters = new JobParametersBuilder();
-            jobParameters.addString("id", user.getId());
+            jobParameters.addString("username", user.getUsername());
             jobParameters.addString("name", user.getName());
             jobParameters.addString("email", user.getEmail());
-            jobParameters.addDate("lastLogined", user.getLastLogined());
+            jobParameters.addDate("lastLoginedDate", user.getLastLoginedDate());
             Job job = applicationContext.getBean("sendEmailToLockUserBatchJob", Job.class);
 
             try {

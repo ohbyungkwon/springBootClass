@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @Service
+@Transactional
 public class OAuth2CustomAuthClientService implements OAuth2AuthorizedClientService {
     @Autowired
     private UserRepository userRepository;
@@ -38,13 +40,12 @@ public class OAuth2CustomAuthClientService implements OAuth2AuthorizedClientServ
 
         CustomUserDetails userDetails = (CustomUserDetails) principal.getPrincipal();
         User user = userRepository.findByEmail(userDetails.getEmail());
-
         user.setAccessToken(accessToken.getTokenValue());
         user.setRefreshToken(refreshToken.getTokenValue());
         user.setProvider(userDetails.getProvider());
-        user.setRole(Role.NORMAL_ROLE);//OAuth2 계정은 이미 이메일은 인증한 것으로 가정(UNAUTHORIZATION_ROLE 생략)
-        User saveUser = userRepository.save(user);
-        log.info("user: {}", saveUser);
+        user.setRole(user.getRole() == Role.ADMIN_ROLE
+                ? Role.ADMIN_ROLE : Role.NORMAL_ROLE);//OAuth2 계정은 이미 이메일은 인증한 것으로 가정(UNAUTHORIZATION_ROLE 생략)
+        log.info("user: {}", user);
 
         request.setAttribute("username", userDetails.getUsername());
     }

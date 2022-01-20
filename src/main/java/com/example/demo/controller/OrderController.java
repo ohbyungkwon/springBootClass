@@ -23,7 +23,7 @@ public class OrderController extends AbstractController{
 
     @PostMapping("/orders")
     public ResponseEntity<?> createOrder(@RequestBody OrderDto.Create dto, Principal principal){
-        productOrderService.saveOrder(dto, getUsername(principal).getId());
+        productOrderService.saveOrder(dto, getUsername(principal).getUsername());
 
         return ResponseEntity.ok().build();
     }

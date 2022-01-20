@@ -5,7 +5,7 @@ import com.example.demo.dto.elevenshop.ElevenProduct;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.context.annotation.Profile;
 
-@Profile("!local")
+@Profile("prod")
 public class ProductItemProcessor implements ItemProcessor<ElevenProduct, Product> {
 
     @Override

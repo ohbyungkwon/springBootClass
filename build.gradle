@@ -23,21 +23,21 @@ repositories {
     mavenCentral()
 }
 
-
 dependencies {
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
     implementation('org.springframework.boot:spring-boot-starter-web')
-//    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-quartz:2.2.2.RELEASE'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.3.4.RELEASE'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.8'
     implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.7.0'
 
+    //html 파일이 resource에 있어 핫로딩이 불가한데 devtools가 이를 지원함(재빌링만 진행하면 된다.)
+    implementation 'org.springframework.boot:spring-boot-devtools'
+
     compile("org.springframework.boot:spring-boot-starter-aop")
     compile("org.springframework.boot:spring-boot-starter-batch")
-
-    compile group:'net.logstash.logback', name:'logstash-logback-encoder', version:'5.1'
+    
     compile group: 'joda-time', name: 'joda-time', version: '2.10.1'
     compile group: 'org.springframework.security', name: 'spring-security-core', version: '5.1.2.RELEASE'
     compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.4.RELEASE'
@@ -52,8 +52,12 @@ dependencies {
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.5.0'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'
 
-    compile('mysql:mysql-connector-java')
+    //compile('mysql:mysql-connector-java')
+    runtimeOnly 'com.h2database:h2'
     compileOnly('org.projectlombok:lombok')
     compileOnly('org.springframework.boot:spring-boot-configuration-processor')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation("org.junit.vintage:junit-vintage-engine") {
+        exclude group: "org.hamcrest", module: "hamcrest-core"
+    }
 }

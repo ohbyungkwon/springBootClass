@@ -25,7 +25,7 @@ public class CustomUsernamePasswordFilter extends UsernamePasswordAuthentication
             throw new CustAuthenticationException("POST 요청만 지원합니다.");
         }
 
-        String username = null, password =  null;
+        String username, password;
         String reqType = request.getHeader("Content-Type");
         if(reqType.equals(jsonType)){
              ObjectMapper mapper = new ObjectMapper();
@@ -33,7 +33,7 @@ public class CustomUsernamePasswordFilter extends UsernamePasswordAuthentication
                 Map<String, String> map = mapper.readValue(request.getReader().lines().collect(Collectors.joining()),
                         new TypeReference<Map<String, String>>(){});
 
-                String usernameKey = super.getUsernameParameter();;
+                String usernameKey = super.getUsernameParameter();
                 String passwordKey = super.getPasswordParameter();
 
                 username = Optional.ofNullable(map.get(usernameKey)).orElse("");
@@ -51,7 +51,7 @@ public class CustomUsernamePasswordFilter extends UsernamePasswordAuthentication
         request.setAttribute("username", username);
 
         User user = new User();
-        user.setId(username);
+        user.setUsername(username);
 
         UsernamePasswordAuthenticationToken tmpAuthenticationToken = new UsernamePasswordAuthenticationToken(new CustomUserDetails(user), password);
         this.setDetails(request, tmpAuthenticationToken);
