@@ -25,11 +25,11 @@ public class Question {
     @Column
     private Date createDate;
 
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn
     @ManyToOne(cascade = CascadeType.ALL)
     private User user;
 
-    @JoinColumn(name="product_id", referencedColumnName = "seq")
+    @JoinColumn
     @ManyToOne(cascade = CascadeType.ALL)
     private Product product;
 

@@ -22,11 +22,11 @@ public class Cart {
     private int productNum;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id", referencedColumnName = "seq")
+    @JoinColumn
     private Product product;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="user_id", referencedColumnName = "id")
+    @JoinColumn
     private User user;
 
     @CreatedDate

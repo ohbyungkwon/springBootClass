@@ -1,29 +1,62 @@
 package com.example.demo.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import java.util.Date;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class ProductDto {
-    private Long seq;
 
-    private String title;
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class show {
+        private Long id;
 
-    private int price;
+        private String title;
 
-    private String imageUrl;
+        private int price;
 
-    private String optional;
+        private String imageUrl;
+
+        private String optional;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class create {
+        private Long id;
+
+        private String title;
+
+        private int price;
+
+        private String imageUrl;
+
+        private String memo;
+
+        private Date expireDate;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class update {
+        private String title;
+
+        private int price;
+
+        private String imageUrl;
+
+        private String memo;
+
+        private Date expireDate;
+    }
 }

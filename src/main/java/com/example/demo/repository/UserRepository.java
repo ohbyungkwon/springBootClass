@@ -18,7 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
 
-    @Query("select u from User u where u.lastLoginedDate > ?1")
+    @Query("select u from User u where u.lastLoginedDate > :date")
     List<User> findUsersByLastLogined(Date date);
 
 }

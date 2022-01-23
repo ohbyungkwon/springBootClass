@@ -14,35 +14,32 @@ import java.util.Date;
 @Entity
 @Table
 @Builder
-@EntityListeners(value = {AuditingEntityListener.class})
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(value = {AuditingEntityListener.class})
 public class ProductOrder {
     @Id
     @GeneratedValue
     private Long seq;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id", referencedColumnName = "seq")
+    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    @JoinColumn
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private CashInfo cashInfo;
+
+    private int usePoint;
+
+    private int buyCnt;
+
+    private int totalPrice;
 
     @CreatedDate
     private Date createDate;
-
-    @Column
-    private int buyCnt;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cashinfo_id", referencedColumnName = "seq")
-    private CashInfo cashInfo;
-
-    @Column
-    private int usePoint;
-
-    @Column
-    private int totalPrice;
 }

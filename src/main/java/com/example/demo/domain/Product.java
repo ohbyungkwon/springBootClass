@@ -1,53 +1,69 @@
 package com.example.demo.domain;
 
+import com.example.demo.dto.ProductDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table
 @Data
 @Builder
-@EntityListeners(value = {AuditingEntityListener.class})
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(value = {AuditingEntityListener.class})
 public class Product {
     @Id
-    @Column
     @GeneratedValue
-    private Long seq;
+    private Long id;
 
-    @Column
     private String title;
 
-    @Column
     private int price;
 
-    @Column
     private String imageUrl;
 
-    @Column
     private String memo;
 
-    @Column
     @CreatedDate
     private Date createDate;
 
-    @Column
+    @CreatedBy
+    private String createUsername;
+
     @LastModifiedDate
     private Date modifyDate;
 
-    @Column
     private Date expireDate;
 
     @ManyToOne
+    @JoinColumn
     private SmallestCategory smallestCategory;
+
+    public static Product create(ProductDto.create productDto){
+        return Product.builder()
+                .title(productDto.getTitle())
+                .price(productDto.getPrice())
+                .imageUrl(productDto.getImageUrl())
+                .memo(productDto.getMemo())
+                .expireDate(productDto.getExpireDate())
+                .build();
+    }
+
+    public Product update(ProductDto.update productDto){
+        this.title = productDto.getTitle();
+        this.price = productDto.getPrice();
+        this.imageUrl = productDto.getImageUrl();
+        this.memo = productDto.getMemo();
+        this.expireDate = productDto.getExpireDate();
+        return this;
+    }
 }

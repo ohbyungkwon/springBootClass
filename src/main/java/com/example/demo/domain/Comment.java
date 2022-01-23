@@ -19,7 +19,7 @@ public class Comment {
 
     private String content;
 
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn
     @ManyToOne(cascade = CascadeType.ALL)
     private User user;
 

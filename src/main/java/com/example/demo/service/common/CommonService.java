@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
 @Service
 public class CommonService {
@@ -38,5 +41,12 @@ public class CommonService {
 
         out.print(json);
         out.flush();
+    }
+
+    public Boolean isOverTargetDate(Date targetDate){
+        LocalDateTime nowDateTime = LocalDateTime.now();
+        LocalDateTime targetDateTime = LocalDateTime.ofInstant(targetDate.toInstant(), ZoneId.systemDefault());
+
+        return targetDateTime.isBefore(nowDateTime);
     }
 }

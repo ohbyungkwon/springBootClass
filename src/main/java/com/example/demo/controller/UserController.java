@@ -27,7 +27,8 @@ public class UserController extends AbstractController{
 
     @GetMapping("/users/me")
     public ResponseEntity<?> searchUser(Principal principal){
-        User user = this.getUsername(principal);
+        User user = this.getUser(principal)
+                .orElseThrow(() -> new BadClientException("사용자 정보가 존재하지 않습니다."));
 
         return new ResponseEntity<ResponseComDto>(
                 ResponseComDto.builder()
@@ -45,10 +46,11 @@ public class UserController extends AbstractController{
 
         userService.createUser(userDto);
 
+        userDto.setPassword("");
         return new ResponseEntity<ResponseComDto>(
                 ResponseComDto.builder()
                 .resultMsg("계정 생성이 완료되었습니다.")
-                .resultObj(null)
+                .resultObj(userDto)
                 .build(), HttpStatus.OK);
     }//회원가입
 
@@ -65,7 +67,7 @@ public class UserController extends AbstractController{
         return new ResponseEntity<ResponseComDto>(
                 ResponseComDto.builder()
                         .resultMsg(msg)
-                        .resultObj(null)
+                        .resultObj(userDto)
                         .build(), HttpStatus.OK);
     }//계정 수정
 

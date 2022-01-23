@@ -27,60 +27,43 @@ import java.util.Optional;
 public class User implements Serializable {
     @Id
     @GeneratedValue
-    @Column
     private Long id;
 
-    @Column
     private String username;
 
-    @Column
     private String password;
 
-    @Column
     private String name;
 
-    @Column
     private String email;
 
-    @Column
     private String birth;
 
-    @Column
     private String addr;
 
-    @Column
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @Column
     private int point;
 
-    @Column
     @CreatedDate
     private Date registerDate;
 
-    @Column
     @LastModifiedDate
     private Date modifyDate;
 
-    @Column
     private Date lastLoginedDate;
 
-    @Column
     private Boolean isEnable;
 
-    @Column
     @Enumerated(EnumType.STRING)
     private Role role;//권한 하나만 가지고있음
 
-    @Column
     @Enumerated(EnumType.STRING)
     private AuthProvider provider;
 
-    @Column
     private String accessToken;
 
-    @Column
     private String refreshToken;
 
     public static User create(UserDto.Create userDto, String password){

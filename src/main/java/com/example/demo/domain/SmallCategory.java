@@ -24,6 +24,6 @@ public class SmallCategory {
     private List<SmallestCategory> smallestCategory;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id", referencedColumnName = "seq")
+    @JoinColumn
     private List<Product> product;
 }

@@ -47,7 +47,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas'
+
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.5.0'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.5.0'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'
