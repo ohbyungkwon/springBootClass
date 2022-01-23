@@ -27,10 +27,13 @@ public class CustomExceptionFilter extends OncePerRequestFilter {
         try{
             filterChain.doFilter(request, response);
         } catch (CustAuthenticationException ex){
+            ex.printStackTrace();
             setErrorResponse(HttpStatus.UNAUTHORIZED, response, ex);
         } catch(RuntimeException ex){
+            ex.printStackTrace();
             setErrorResponse(HttpStatus.BAD_REQUEST, response, ex);
         } catch (Exception ex){
+            ex.printStackTrace();
             setErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, response, ex);
         }
     }

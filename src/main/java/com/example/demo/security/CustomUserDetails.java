@@ -1,7 +1,9 @@
 package com.example.demo.security;
 
 import com.example.demo.domain.User;
+import com.example.demo.domain.enums.Gender;
 import com.example.demo.enums.AuthProvider;
+import com.example.demo.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -19,14 +21,39 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
 
     /* UserDetail*/
     @Override
+    public String getUsername() {
+        return user.getUsername();
+    }
+
+    @Override
     @JsonIgnore
     public String getPassword() {
         return user.getPassword();
     }
 
     @Override
-    public String getUsername() {
-        return user.getUsername();
+    public String getName() {
+        return user.getName();
+    }
+
+    public String getEmail() {
+        return user.getEmail();
+    }
+
+    public String getBirth(){
+        return user.getBirth();
+    }
+
+    public String getAddr(){
+        return user.getAddr();
+    }
+
+    public Gender getGender(){
+        return user.getGender();
+    }
+
+    public int getPoint(){
+        return user.getPoint();
     }
 
     @Override
@@ -34,9 +61,8 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
         return user.getIsEnable();
     }
 
-    @Override
-    public String getName() {
-        return user.getName();
+    public AuthProvider getAuthProvider() {
+        return user.getProvider();
     }
 
     @Override
@@ -65,15 +91,5 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
     @Override
     public Map<String, Object> getAttributes() {
         return null;
-    }
-
-
-    /* Custom */
-    public String getEmail() {
-        return user.getEmail();
-    }
-
-    public AuthProvider getProvider() {
-        return user.getProvider();
     }
 }

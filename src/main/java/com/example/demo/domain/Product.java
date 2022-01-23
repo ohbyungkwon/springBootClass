@@ -29,9 +29,13 @@ public class Product {
 
     private int price;
 
+    private int stockQuantity;
+
     private String imageUrl;
 
     private String memo;
+
+    private Date expireDate;
 
     @CreatedDate
     private Date createDate;
@@ -42,8 +46,6 @@ public class Product {
     @LastModifiedDate
     private Date modifyDate;
 
-    private Date expireDate;
-
     @ManyToOne
     @JoinColumn
     private SmallestCategory smallestCategory;
@@ -51,6 +53,7 @@ public class Product {
     public static Product create(ProductDto.create productDto){
         return Product.builder()
                 .title(productDto.getTitle())
+                .stockQuantity(productDto.getStockQuantity())
                 .price(productDto.getPrice())
                 .imageUrl(productDto.getImageUrl())
                 .memo(productDto.getMemo())
@@ -61,9 +64,14 @@ public class Product {
     public Product update(ProductDto.update productDto){
         this.title = productDto.getTitle();
         this.price = productDto.getPrice();
+        this.stockQuantity = productDto.getStockQuantity();
         this.imageUrl = productDto.getImageUrl();
         this.memo = productDto.getMemo();
         this.expireDate = productDto.getExpireDate();
         return this;
+    }
+
+    public void minusStockQuantity(int buyCnt){
+        this.stockQuantity -= buyCnt;
     }
 }

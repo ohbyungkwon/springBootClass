@@ -5,7 +5,6 @@ import com.example.demo.domain.CashInfo;
 import com.example.demo.domain.Product;
 import com.example.demo.domain.ProductOrder;
 import com.example.demo.domain.User;
-import com.example.demo.domain.enums.CashInfoState;
 import com.example.demo.dto.OrderDto;
 import com.example.demo.exception.BadClientException;
 import com.example.demo.repository.ProductOrderRepository;
@@ -14,13 +13,11 @@ import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-
 @Service
 public class ProductOrderService {
-    private ProductOrderRepository productOrderRepository;
-    private ProductRepository productRepository;
-    private UserRepository userRepository;
+    private final ProductOrderRepository productOrderRepository;
+    private final ProductRepository productRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public ProductOrderService(ProductOrderRepository productOrderRepository,
@@ -32,42 +29,16 @@ public class ProductOrderService {
     }
 
     @CustTransaction
-    public ProductOrder saveOrder(OrderDto.Create dto, String loginedUser){
-        Product product = productRepository.findProductById(dto.getSeqProduct());
+    public ProductOrder saveOrder(OrderDto.Create orderDto, String username){
+        Product product = productRepository.findById(orderDto.getProductId())
+                .orElseThrow(() -> new BadClientException("상품이 존재하지 않습니다."));
 
-        User user = userRepository.findByUsername(loginedUser).get();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new BadClientException("사용자 정보가 존재하지 않습니다."));
 
-        if(dto.getUsePoint() > user.getPoint()){
-            throw new BadClientException("포인트 부족");
-        }
-        if(System.currentTimeMillis() > product.getExpireDate().getTime()){
-            throw new BadClientException("상품 만료");
-        }
+        CashInfo cashInfo = CashInfo.create(orderDto);
 
-        int totalPrice = dto.getBuyCnt() * product.getPrice() - dto.getUsePoint();
-        user.setPoint(user.getPoint() - dto.getUsePoint());
-
-        Object paymentResponse = null;
-
-        if(paymentResponse != null) {
-            throw new BadClientException("카드 에러");
-        }
-
-        CashInfo cashInfo = CashInfo.builder()
-                .bankname(dto.getCashInfo().getBankname())
-                .inputter(dto.getCashInfo().getInputter())
-                .methodTitle(dto.getPayMethod())
-                .state(CashInfoState.SUCCESS)
-                .build();
-
-        ProductOrder productOrder = ProductOrder.builder()
-                                .buyCnt(dto.getBuyCnt())
-                                .cashInfo(cashInfo)
-                                .totalPrice(totalPrice)
-                                .usePoint(dto.getUsePoint())
-                                .user(user)
-                                .product(product)
-                                .build();
+        ProductOrder productOrder = ProductOrder.create(cashInfo, user, product, orderDto);
 
         return productOrderRepository.save(productOrder);
     }

@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CashInfoDto {
-    private String bankname;
+    private String bankName;
     private String inputter;
 }

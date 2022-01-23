@@ -92,4 +92,8 @@ public class User implements Serializable {
         this.point = newPoint;
         recommendedUser.setPoint(recommendedUser.getPoint() + newPoint);
     }
+
+    public void minusPoint(int usePoint){
+        this.point -= usePoint;
+    }
 }

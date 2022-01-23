@@ -37,6 +37,8 @@ public class ProductDto {
 
         private int price;
 
+        private int stockQuantity;
+
         private String imageUrl;
 
         private String memo;
@@ -52,6 +54,8 @@ public class ProductDto {
         private String title;
 
         private int price;
+
+        private int stockQuantity;
 
         private String imageUrl;
 

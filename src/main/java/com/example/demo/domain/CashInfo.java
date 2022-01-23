@@ -1,8 +1,8 @@
 package com.example.demo.domain;
 
-
 import com.example.demo.domain.enums.CashInfoState;
 import com.example.demo.domain.enums.PayMethod;
+import com.example.demo.dto.OrderDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,31 +15,34 @@ import javax.persistence.*;
 @Entity
 @Table
 @Builder
-@EntityListeners(value = {AuditingEntityListener.class})
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(value = {AuditingEntityListener.class})
 public class CashInfo {
-    @GeneratedValue
     @Id
-    @Column
-    private Long seq;
+    @GeneratedValue
+    private Long id;
 
-    @Column
-    private PayMethod methodTitle;
+    private PayMethod payMethod;
 
-    @Column
-    private String bankname;
+    private String bankName;
 
-    @Column
     private String inputter;
 
-    @Column
     private String expireDate;
 
-    @Column
     private CashInfoState state;
 
-    @JoinColumn(name = "order_id", referencedColumnName = "seq")
-    @OneToOne
+    @JoinColumn
+    @OneToOne(mappedBy = "cashInfo", fetch = FetchType.LAZY)
     private ProductOrder productOrder;
+
+    public static CashInfo create(OrderDto.Create orderDto){
+        return CashInfo.builder()
+                .payMethod(orderDto.getPayMethod())
+                .bankName(orderDto.getCashInfo().getBankName())
+                .inputter(orderDto.getCashInfo().getInputter())
+                .state(CashInfoState.SUCCESS)
+                .build();
+    }
 }

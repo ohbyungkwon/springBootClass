@@ -42,7 +42,7 @@ public class OAuth2CustomAuthClientService implements OAuth2AuthorizedClientServ
         User user = userRepository.findByEmail(userDetails.getEmail());
         user.setAccessToken(accessToken.getTokenValue());
         user.setRefreshToken(refreshToken.getTokenValue());
-        user.setProvider(userDetails.getProvider());
+        user.setProvider(userDetails.getAuthProvider());
         user.setRole(user.getRole() == Role.ADMIN_ROLE
                 ? Role.ADMIN_ROLE : Role.NORMAL_ROLE);//OAuth2 계정은 이미 이메일은 인증한 것으로 가정(UNAUTHORIZATION_ROLE 생략)
         log.info("user: {}", user);

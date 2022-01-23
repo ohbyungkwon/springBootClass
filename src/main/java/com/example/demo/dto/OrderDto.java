@@ -13,7 +13,7 @@ public class OrderDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Create{
-        private Long seqProduct;
+        private Long productId;
         private CashInfoDto cashInfo;
         private PayMethod payMethod;
         private int usePoint;
