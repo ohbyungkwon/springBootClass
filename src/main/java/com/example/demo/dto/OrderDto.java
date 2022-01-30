@@ -18,5 +18,8 @@ public class OrderDto {
         private PayMethod payMethod;
         private int usePoint;
         private int buyCnt;
+        private String city;
+        private String street;
+        private String zipcode;
     }
 }

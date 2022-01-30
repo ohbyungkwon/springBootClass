@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import com.example.demo.domain.enums.DeliveryState;
 import com.example.demo.dto.OrderDto;
 import com.example.demo.exception.BadClientException;
 import lombok.AllArgsConstructor;
@@ -37,11 +38,17 @@ public class ProductOrder {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private CashInfo cashInfo;
 
+    @JoinColumn
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Delivery delivery;
+
     private int buyCnt; //촐 구매 개수
 
     private int usePoint; //포인트 사용 금액
 
     private int totalPrice; //포인트 제외 결제 금액
+
+    private DeliveryState deliveryState;
 
     @CreatedDate
     private Date createDate;
@@ -63,9 +70,12 @@ public class ProductOrder {
             throw new BadClientException("상품 수량이 부족합니다.");
         }
 
+        Delivery delivery = Delivery.create(orderDto);
+
         product.minusStockQuantity(orderDto.getBuyCnt());
         user.minusPoint(orderDto.getUsePoint());
         int totalPrice = (orderDto.getBuyCnt() * product.getPrice()) - orderDto.getUsePoint();
+
         return ProductOrder.builder()
                 .cashInfo(cashInfo)
                 .totalPrice(totalPrice)
@@ -73,6 +83,8 @@ public class ProductOrder {
                 .buyCnt(orderDto.getBuyCnt())
                 .user(user)
                 .product(product)
+                .delivery(delivery)
+                .deliveryState(DeliveryState.READY)
                 .build();
     }
 }
