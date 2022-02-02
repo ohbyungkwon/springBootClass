@@ -47,7 +47,7 @@ public class Product {
     private Date modifyDate;
 
     @JoinColumn
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private SmallestCategory smallestCategory;
 
     @JoinColumn
@@ -81,5 +81,16 @@ public class Product {
 
     public void minusStockQuantity(int buyCnt){
         this.stockQuantity -= buyCnt;
+    }
+
+    public void joinCategory(LargeCategory largeCategory, SmallCategory smallCategory,
+                             SmallestCategory smallestCategory){
+        this.smallestCategory = smallestCategory;
+        this.smallCategory = smallCategory;
+        this.largeCategory = largeCategory;
+
+        smallestCategory.getProduct().add(this);
+        smallCategory.getProduct().add(this);
+        largeCategory.getProduct().add(this);
     }
 }

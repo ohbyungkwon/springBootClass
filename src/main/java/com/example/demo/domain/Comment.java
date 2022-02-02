@@ -13,18 +13,17 @@ import java.util.Date;
 @EntityListeners(value = {AuditingEntityListener.class})
 public class Comment {
     @Id
-    @Column
     @GeneratedValue
-    private Long seq;
+    private Long id;
 
     private String content;
 
     @JoinColumn
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @JoinColumn(name = "question_id", referencedColumnName = "seq")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
     private Question question;
 
     @CreatedDate

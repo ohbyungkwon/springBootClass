@@ -1,45 +1,47 @@
 package com.example.demo.domain;
 
-import lombok.Data;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@Data
-@Entity
+@Setter
+@Getter
 @Table
+@Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EntityListeners(value = {AuditingEntityListener.class})
 public class Question {
-    @Column
     @Id
     @GeneratedValue
-    private Long seq;
+    private Long id;
 
-    @Column
     private String content;
 
+    private boolean isBuy;
+
+    private boolean deleted;
+
     @CreatedDate
-    @Column
     private Date createDate;
 
+    @LastModifiedDate
+    private Date modifiedDate;
+
     @JoinColumn
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     @JoinColumn
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
-
-    @Column
-    private boolean buy;
-
-    @Column
-    private boolean deleted;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Comment> comment;
 }
-//category 등등 추가하기 모델

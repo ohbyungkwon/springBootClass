@@ -53,4 +53,9 @@ public class CategoryService {
 
         categoryRepository.save(largeCategory);
     }
+
+    @Transactional
+    public <T> T findCategory(Long id, Class<T> cls){
+        return categoryRepository.findOne(id, cls);
+    }
 }

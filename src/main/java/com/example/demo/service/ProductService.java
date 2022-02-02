@@ -1,6 +1,9 @@
 package com.example.demo.service;
 
+import com.example.demo.domain.LargeCategory;
 import com.example.demo.domain.Product;
+import com.example.demo.domain.SmallCategory;
+import com.example.demo.domain.SmallestCategory;
 import com.example.demo.dto.ProductDto;
 import com.example.demo.exception.BadClientException;
 import com.example.demo.repository.ProductRepository;
@@ -24,11 +27,14 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryService categoryService;
     private final CommonService commonService;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, CommonService commonService){
+    public ProductService(ProductRepository productRepository, CategoryService categoryService,
+                          CommonService commonService){
         this.productRepository = productRepository;
+        this.categoryService = categoryService;
         this.commonService = commonService;
     }
 
@@ -42,6 +48,12 @@ public class ProductService {
     @Transactional
     public Product createProduct(ProductDto.create productDto){
         Product product = Product.create(productDto);
+        LargeCategory largeCategory = categoryService.findCategory(productDto.getLargeCategoryId(), LargeCategory.class);
+        SmallCategory smallCategory = categoryService.findCategory(productDto.getSmallCategoryId(), SmallCategory.class);
+        SmallestCategory smallestCategory = categoryService.findCategory(productDto.getSmallestCategoryId(), SmallestCategory.class);
+
+        product.joinCategory(largeCategory, smallCategory, smallestCategory);
+
         return productRepository.save(product);
     }
 
