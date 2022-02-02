@@ -1,9 +1,11 @@
 package com.example.demo.domain;
 
+import com.example.demo.dto.CategoryDto;
 import lombok.Data;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,16 +16,20 @@ public class LargeCategory {
     @Id
     @Column
     @GeneratedValue
-    private Long seq;
+    private Long id;
 
     @Column
     private String title;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "small_category_id", referencedColumnName = "seq")
-    private List<SmallCategory> smallCategory;
+    @OneToMany(mappedBy = "largeCategory", cascade = CascadeType.PERSIST)
+    private List<SmallCategory> smallCategory = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn
-    private List<Product> product;
+    @OneToMany(mappedBy = "largeCategory")
+    private List<Product> product = new ArrayList<>();
+
+    public static LargeCategory create(String title){
+        LargeCategory largeCategory = new LargeCategory();
+        largeCategory.setTitle(title);
+        return largeCategory;
+    }
 }

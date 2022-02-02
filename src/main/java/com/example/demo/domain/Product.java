@@ -46,9 +46,17 @@ public class Product {
     @LastModifiedDate
     private Date modifyDate;
 
-    @ManyToOne
     @JoinColumn
+    @ManyToOne
     private SmallestCategory smallestCategory;
+
+    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
+    private SmallCategory smallCategory;
+
+    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
+    private LargeCategory largeCategory;
 
     public static Product create(ProductDto.create productDto){
         return Product.builder()

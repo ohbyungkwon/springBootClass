@@ -33,10 +33,6 @@ public class CashInfo {
 
     private CashInfoState state;
 
-    @JoinColumn
-    @OneToOne(mappedBy = "cashInfo", fetch = FetchType.LAZY)
-    private ProductOrder productOrder;
-
     public static CashInfo create(OrderDto.Create orderDto){
         return CashInfo.builder()
                 .payMethod(orderDto.getPayMethod())

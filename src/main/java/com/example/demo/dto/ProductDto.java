@@ -44,6 +44,12 @@ public class ProductDto {
         private String memo;
 
         private Date expireDate;
+
+        private Long smallestCategoryId;
+
+        private Long smallCategoryId;
+
+        private Long largeCategoryId;
     }
 
     @Data
