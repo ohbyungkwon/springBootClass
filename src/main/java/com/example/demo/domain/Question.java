@@ -43,5 +43,5 @@ public class Question {
     private Product product;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    private List<Comment> comment;
+    private List<Comment> comments;
 }

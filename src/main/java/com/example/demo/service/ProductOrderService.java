@@ -12,6 +12,7 @@ import com.example.demo.repository.ProductRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductOrderService {
@@ -28,7 +29,7 @@ public class ProductOrderService {
         this.userRepository = userRepository;
     }
 
-    @CustTransaction
+    @Transactional
     public ProductOrder saveOrder(OrderDto.Create orderDto, String username){
         Product product = productRepository.findById(orderDto.getProductId())
                 .orElseThrow(() -> new BadClientException("상품이 존재하지 않습니다."));

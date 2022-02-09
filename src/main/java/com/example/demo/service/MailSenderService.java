@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.UUID;
@@ -31,7 +32,7 @@ public class MailSenderService {
     @Autowired
     private UserRepository userRepository;
 
-    @CustTransaction
+    @Transactional
     public void sendMailToAuth(Object mailDto, Principal principal) throws Exception{
         String username = principal.getName();
         User user = userRepository.findByUsername(username).get();
@@ -56,7 +57,7 @@ public class MailSenderService {
         mailUtil.send();
     }
 
-    @CustTransaction
+    @Transactional
     public void checkAuthCode(MailDto.AuthEmail authEmail, Principal principal) throws Exception{
         String username = principal.getName();
         User user = userRepository.findByUsername(username).get();

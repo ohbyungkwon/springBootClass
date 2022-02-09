@@ -1,13 +1,16 @@
 package com.example.demo.service;
 
+import com.example.demo.domain.Comment;
 import com.example.demo.domain.Product;
 import com.example.demo.domain.Question;
 import com.example.demo.domain.User;
+import com.example.demo.dto.CommentDto;
 import com.example.demo.dto.QuestionDto;
 import com.example.demo.exception.BadClientException;
 import com.example.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class QuestionService {
@@ -28,6 +31,7 @@ public class QuestionService {
         this.productOrderRepository = productOrderRepository;
     }
 
+    @Transactional
     public QuestionDto.create createQuestion(QuestionDto.create questionDto, String username){
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new BadClientException("사용자 정보가 없습니다."));
@@ -49,5 +53,21 @@ public class QuestionService {
         questionRepository.save(question);
 
         return questionDto;
+    }
+
+    @Transactional
+    public CommentDto.create createComment(CommentDto.create commentDto, String username){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new BadClientException("사용자 정보가 없습니다."));
+
+        Long questionId = commentDto.getQuestionId();
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new BadClientException("QnA 질문이 없습니다."));
+
+        Comment comment = Comment.commentBuilder(commentDto, question, user);
+        comment.joinQuestion(question);
+
+        commentRepository.save(comment);
+        return commentDto;
     }
 }
