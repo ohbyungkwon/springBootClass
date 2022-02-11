@@ -58,13 +58,14 @@ public class ProductService {
     }
 
     @Transactional
-    public void updateProduct(Product product, ProductDto.update productDto){
+    public ProductDto.update updateProduct(Product product, ProductDto.update productDto){
         Date expiredDate = product.getExpireDate();
         if(commonService.isOverTargetDate(expiredDate)){
             throw new BadClientException("이미 만료된 상품은 수정 불가합니다.");
         }
 
         product.update(productDto);
+        return productDto;
     }
 
     @Transactional

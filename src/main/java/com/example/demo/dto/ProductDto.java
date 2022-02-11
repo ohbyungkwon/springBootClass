@@ -1,10 +1,8 @@
 package com.example.demo.dto;
 
+import com.example.demo.domain.Product;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
@@ -24,6 +22,12 @@ public class ProductDto {
         private String imageUrl;
 
         private String optional;
+
+        private CategoryDto.show largeCategory;
+
+        private CategoryDto.show smallCategory;
+
+        private CategoryDto.show smallestCategory;
     }
 
     @Data

@@ -12,15 +12,25 @@ public class CategoryDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class show {
+        private Long id;
+        private String title;
+    }
+
+    @Setter
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class createSingle {
-        String title;
+        private String title;
 
         @Enumerated(EnumType.STRING)
-        Category category;
+        private Category category;
 
-        Long largeCategoryId;
+        private Long largeCategoryId;
 
-        Long smallCategoryId;
+        private Long smallCategoryId;
     }
 
     @Setter
@@ -29,8 +39,8 @@ public class CategoryDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class create{
-        String smallestTitle;
-        String smallTitle;
-        String largeTitle;
+        private String smallestTitle;
+        private String smallTitle;
+        private String largeTitle;
     }
 }

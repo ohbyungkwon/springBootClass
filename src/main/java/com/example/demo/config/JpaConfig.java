@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +13,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 @Configuration
@@ -22,6 +25,9 @@ public class JpaConfig {
     @Autowired
     private DataSource dataSource;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
         JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
@@ -30,4 +36,9 @@ public class JpaConfig {
         return jpaTransactionManager;
     }
 
+
+    @Bean
+    public JPAQueryFactory jpaQueryFactory(){
+        return new JPAQueryFactory(entityManager);
+    }
 }
