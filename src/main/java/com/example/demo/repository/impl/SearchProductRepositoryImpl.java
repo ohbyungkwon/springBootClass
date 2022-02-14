@@ -2,6 +2,9 @@ package com.example.demo.repository.impl;
 
 import com.example.demo.domain.Product;
 import static com.example.demo.domain.QProduct.product;
+import static com.example.demo.domain.QLargeCategory.largeCategory;
+import static com.example.demo.domain.QSmallCategory.smallCategory;
+import static com.example.demo.domain.QSmallestCategory.smallestCategory;
 
 import com.example.demo.domain.enums.Category;
 import com.example.demo.dto.ProductDto;
@@ -88,14 +91,14 @@ public class SearchProductRepositoryImpl implements SearchProductRepository {
     }
 
     public JPAQuery<Product> joinAllLargeCategory(JPAQuery<Product> selectFrom){
-        return selectFrom.innerJoin(product.largeCategory).fetchJoin();
+        return selectFrom.innerJoin(product.largeCategory, largeCategory).fetchJoin();
     }
 
     public JPAQuery<Product> joinAllSmallCategory(JPAQuery<Product> selectFrom){
-        return selectFrom.innerJoin(product.smallCategory).fetchJoin();
+        return selectFrom.innerJoin(product.smallCategory, smallCategory).fetchJoin();
     }
 
     public JPAQuery<Product> joinAllSmallestCategory(JPAQuery<Product> selectFrom){
-        return selectFrom.innerJoin(product.smallestCategory).fetchJoin();
+        return selectFrom.innerJoin(product.smallestCategory, smallestCategory).fetchJoin();
     }
 }
