@@ -6,6 +6,7 @@ import static com.example.demo.domain.QLargeCategory.largeCategory;
 import static com.example.demo.domain.QSmallCategory.smallCategory;
 import static com.example.demo.domain.QSmallestCategory.smallestCategory;
 
+import com.example.demo.domain.QLoginHistory;
 import com.example.demo.domain.enums.Category;
 import com.example.demo.dto.ProductDto;
 import com.example.demo.repository.search.SearchProductRepository;
@@ -60,7 +61,7 @@ public class SearchProductRepositoryImpl implements SearchProductRepository {
 
         QueryResults<Product> result = selectFrom
                 .where(titleEquals(productTitle),
-                        categoryTitleEquals(category, categoryId))
+                        categoryIdEquals(category, categoryId))
                 .orderBy(product.createDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -78,7 +79,7 @@ public class SearchProductRepositoryImpl implements SearchProductRepository {
         return keyword == null ? null : product.title.containsIgnoreCase(keyword);
     }
 
-    private BooleanExpression categoryTitleEquals(Category category, Long id) {
+    private BooleanExpression categoryIdEquals(Category category, Long id) {
         if(category == Category.LARGE){
             return product.largeCategory.id.eq(id);
         } else if(category == Category.SMALL){
