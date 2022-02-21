@@ -9,6 +9,8 @@ import com.example.demo.dto.QuestionDto;
 import com.example.demo.exception.BadClientException;
 import com.example.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,5 +71,24 @@ public class QuestionService {
 
         commentRepository.save(comment);
         return commentDto;
+    }
+
+    @Transactional
+    public Page<QuestionDto.show> showQuestionList(String username, Pageable pageable){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new BadClientException("사용자 정보가 없습니다."));
+
+        return questionRepository.findQuestionWithProductInfo(username, pageable);
+    }
+
+    @Transactional
+    public QuestionDto.showDetail showQuestionDetail(String username, Long questionId, Pageable pageable){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new BadClientException("사용자 정보가 없습니다."));
+
+        questionRepository.findById(questionId)
+                        .orElseThrow(() -> new BadClientException("질문 정보가 없습니다."));
+
+        return questionRepository.findQuestionAndCommentWithProductInfo(username, questionId, pageable);
     }
 }
