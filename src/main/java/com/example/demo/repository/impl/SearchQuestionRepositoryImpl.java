@@ -45,7 +45,7 @@ public class SearchQuestionRepositoryImpl implements SearchQuestionRepository {
                             )
                         )
                         .from(question)
-                        .join(question.user, user)
+                        .innerJoin(question.user, user)
                         .innerJoin(question.product, product).fetchJoin()
                         .where(userIdEquals(userId))
                         .orderBy(question.createDate.desc())
@@ -53,7 +53,7 @@ public class SearchQuestionRepositoryImpl implements SearchQuestionRepository {
 
         JPAQuery<Question> questionCnt =
                 jpaQueryFactory.selectFrom(question)
-                        .innerJoin(question.user, user).fetchJoin()
+                        .innerJoin(question.user, user)
                         .where(userIdEquals(userId));
 
         return PageableExecutionUtils.getPage(questions, pageable, questionCnt::fetchCount);
@@ -70,7 +70,7 @@ public class SearchQuestionRepositoryImpl implements SearchQuestionRepository {
                         )
                 )
                 .from(comment)
-                .join(comment.question, question)
+                .innerJoin(comment.question, question)
                 .innerJoin(comment.user, user).fetchJoin()
                 .where(questionIdEquals(questionId))
                 .orderBy(comment.createDate.desc())
@@ -114,7 +114,7 @@ public class SearchQuestionRepositoryImpl implements SearchQuestionRepository {
                         )
                 )
                 .from(question)
-                .join(question.product, product)
+                .innerJoin(question.product, product)
                 .where(productIdEquals(productId))
                 .fetch();
     }

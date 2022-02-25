@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.annotation.CustTransaction;
 import com.example.demo.domain.CashInfo;
 import com.example.demo.domain.Product;
 import com.example.demo.domain.ProductOrder;
@@ -11,10 +10,13 @@ import com.example.demo.repository.ProductOrderRepository;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class ProductOrderService {
     private final ProductOrderRepository productOrderRepository;
     private final ProductRepository productRepository;
@@ -42,5 +44,16 @@ public class ProductOrderService {
         ProductOrder productOrder = ProductOrder.create(cashInfo, user, product, orderDto);
 
         return productOrderRepository.save(productOrder);
+    }
+
+    public Page<OrderDto.showSimple> searchMyProductOrder(String username, Pageable pageable){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new BadClientException("사용자 정보가 존재하지 않습니다."));
+
+        return productOrderRepository.findMyOrders(user.getId(), pageable);
+    }
+
+    public OrderDto.showDetail searchMyProductOrderDetail(Long orderId){
+        return productOrderRepository.findOrderDetail(orderId);
     }
 }

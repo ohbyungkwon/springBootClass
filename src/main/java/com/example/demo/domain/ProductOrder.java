@@ -3,10 +3,7 @@ package com.example.demo.domain;
 import com.example.demo.domain.enums.DeliveryState;
 import com.example.demo.dto.OrderDto;
 import com.example.demo.exception.BadClientException;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -14,12 +11,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.util.Date;
 
-@Data
+@Setter
+@Getter
 @Entity
 @Table
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(value = {AuditingEntityListener.class})
 public class ProductOrder {
     @Id

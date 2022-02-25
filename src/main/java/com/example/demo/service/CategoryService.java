@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.lang.reflect.InvocationTargetException;
 
 @Service
+@Transactional(readOnly = true)
 public class CategoryService {
     private final CategoryRepository categoryRepository;
 
@@ -54,7 +55,6 @@ public class CategoryService {
         categoryRepository.save(largeCategory);
     }
 
-    @Transactional
     public <T> T findCategory(Long id, Class<T> cls){
         return categoryRepository.findOne(id, cls);
     }

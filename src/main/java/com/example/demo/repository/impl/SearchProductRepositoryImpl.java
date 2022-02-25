@@ -113,16 +113,16 @@ public class SearchProductRepositoryImpl implements SearchProductRepository {
 
     public <T> JPAQuery<T> joinLargeCategory(JPAQuery<T> selectFrom, boolean isFetch){
         return (isFetch) ? selectFrom.innerJoin(product.largeCategory, largeCategory).fetchJoin()
-                : selectFrom.join(product.largeCategory, largeCategory);
+                : selectFrom.innerJoin(product.largeCategory, largeCategory);
     }
 
     public <T> JPAQuery<T> joinSmallCategory(JPAQuery<T> selectFrom, boolean isFetch){
         return (isFetch) ? selectFrom.innerJoin(product.smallCategory, smallCategory).fetchJoin()
-                : selectFrom.join(product.smallCategory, smallCategory);
+                : selectFrom.innerJoin(product.smallCategory, smallCategory);
     }
 
     public <T> JPAQuery<T> joinSmallestCategory(JPAQuery<T> selectFrom, boolean isFetch){
         return (isFetch) ? selectFrom.innerJoin(product.smallestCategory, smallestCategory).fetchJoin()
-                : selectFrom.join(product.smallestCategory, smallestCategory);
+                : selectFrom.innerJoin(product.smallestCategory, smallestCategory);
     }
 }

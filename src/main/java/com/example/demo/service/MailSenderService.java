@@ -18,6 +18,7 @@ import java.security.Principal;
 import java.util.UUID;
 
 @Service
+@Transactional(readOnly = true)
 public class MailSenderService {
 
     @Value("$(mail.smtp.username)")
@@ -32,7 +33,6 @@ public class MailSenderService {
     @Autowired
     private UserRepository userRepository;
 
-    @Transactional
     public void sendMailToAuth(Object mailDto, Principal principal) throws Exception{
         String username = principal.getName();
         User user = userRepository.findByUsername(username).get();

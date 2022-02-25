@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class QuestionService {
     private final QuestionRepository questionRepository;
     private final CommentRepository commentRepository;
@@ -75,7 +76,6 @@ public class QuestionService {
         return commentDto;
     }
 
-    @Transactional
     public Page<QuestionDto.show> showMyQuestions(String username, Pageable pageable){
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new BadClientException("사용자 정보가 없습니다."));
@@ -83,7 +83,6 @@ public class QuestionService {
         return questionRepository.findMyQuestionsWithProduct(user.getId(), pageable);
     }
 
-    @Transactional
     public List<CommentDto.show> showCommentsInMyQuestion(String username, Long questionId){
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new BadClientException("사용자 정보가 없습니다."));
@@ -94,12 +93,10 @@ public class QuestionService {
         return questionRepository.findCommentsInMyQuestion(user.getId(), questionId);
     }
 
-    @Transactional
     public List<QuestionDto.showSimple> showQuestionsInProduct(Long productId){
         return questionRepository.findQuestionsInProduct(productId);
     }
 
-    @Transactional
     public QuestionDto.showDetail showMyQuestionsDetail(String username, Long questionId){
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new BadClientException("사용자 정보가 없습니다."));

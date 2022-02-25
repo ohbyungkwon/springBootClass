@@ -1,11 +1,11 @@
 package com.example.demo.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.demo.domain.enums.CashInfoState;
+import com.example.demo.domain.enums.PayMethod;
+import lombok.*;
 
-@Data
+@Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
