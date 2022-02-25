@@ -35,9 +35,10 @@ public class ProductController extends AbstractController {
         this.downloadView = downloadView;
     }
 
-    @GetMapping("/products")
+    @Deprecated
+    @GetMapping("/products/old")
     public ResponseEntity<ResponseComDto> searchProduct(Pageable pageable, PagedResourcesAssembler<Product> assembler){
-        Page<Product> products = productService.showProduct(pageable);
+        Page<Product> products = productService.searchProducts(pageable);
 
         return new ResponseEntity<>(
                 ResponseComDto.builder()
@@ -46,9 +47,32 @@ public class ProductController extends AbstractController {
                         .build(), HttpStatus.OK);
     }
 
+    @GetMapping("/products")
+    public ResponseEntity<ResponseComDto> searchProductUsingOption(ProductDto.searchOption searchOption, Pageable pageable){
+        Page<ProductDto.showSimple> products = productService.searchProductsUsingOption(searchOption, pageable);
+
+        return new ResponseEntity<>(
+                ResponseComDto.builder()
+                        .resultMsg("상품 리스트 조회 완료")
+                        .resultObj(products)
+                        .build(), HttpStatus.OK);
+    }
+
+    @GetMapping("/products/{productId}")
+    public ResponseEntity<ResponseComDto> searchProductDetail(@PathVariable Long productId){
+        ProductDto.showDetail product = productService.searchProductsDetail(productId);
+
+        return new ResponseEntity<>(
+                ResponseComDto.builder()
+                        .resultMsg("상품 조회 완료")
+                        .resultObj(product)
+                        .build(), HttpStatus.OK);
+    }
+
     @PostMapping("/products")
-    public ResponseEntity<?> createProduct(ProductDto.create productDto){
-        productService.createProduct(productDto);
+    public ResponseEntity<ResponseComDto> createProduct(ProductDto.create productDto, Principal principal){
+        String username = principal.getName();
+        productService.createProduct(productDto, username);
         return new ResponseEntity<ResponseComDto>(
                 ResponseComDto.builder()
                         .resultMsg("상품이 등록되었습니다.")
@@ -57,8 +81,10 @@ public class ProductController extends AbstractController {
     }
 
     @PutMapping("/products/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable("id") Product product, ProductDto.update productDto){
-        productService.updateProduct(product, productDto);
+    public ResponseEntity<ResponseComDto> updateProduct(@PathVariable("id") Product product,
+                                                        ProductDto.update productDto, Principal principal){
+        String username = principal.getName();
+        productService.updateProduct(product, productDto, username);
         return new ResponseEntity<ResponseComDto>(
                 ResponseComDto.builder()
                         .resultMsg("상품이 수정되었습니다.")
@@ -67,7 +93,7 @@ public class ProductController extends AbstractController {
     }
 
     @DeleteMapping("/products/{id}")
-    public ResponseEntity<?> deleteProduct(@PathVariable("id") Product product){
+    public ResponseEntity<ResponseComDto> deleteProduct(@PathVariable("id") Product product){
         productService.deleteProduct(product);
         return new ResponseEntity<ResponseComDto>(
                 ResponseComDto.builder()

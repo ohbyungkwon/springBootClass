@@ -9,9 +9,12 @@ import static com.example.demo.domain.QSmallestCategory.smallestCategory;
 import com.example.demo.domain.QLoginHistory;
 import com.example.demo.domain.enums.Category;
 import com.example.demo.dto.ProductDto;
+import com.example.demo.dto.QProductDto_showDetail;
+import com.example.demo.dto.QProductDto_showSimple;
 import com.example.demo.repository.search.SearchProductRepository;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,42 +40,55 @@ public class SearchProductRepositoryImpl implements SearchProductRepository {
      * 1. ALL - 전체검색
      * 2. 특정 Category 내에서 상품 검색
      * 3. 특정 Category 내 상품 리스트 검색
-     * @param productTitle
-     * @param category
-     * @param categoryId
-     * @param pageable
-     * @return
      */
     @Override
-    public Page<ProductDto.show> findProductWithCategory(String productTitle, Category category,
-                                                            Long categoryId, Pageable pageable){
-        JPAQuery<Product> selectFrom = jpaQueryFactory.selectFrom(product);
-        if(category == Category.LARGE){
-            selectFrom = joinAllLargeCategory(selectFrom);
-        } else if(category == Category.SMALL){
-            selectFrom = joinAllSmallCategory(selectFrom);
-        } else if(category == Category.SMALLEST){
-            selectFrom = joinAllSmallestCategory(selectFrom);
+    public Page<ProductDto.showSimple> findProductWithCategory(ProductDto.searchOption searchOption, Pageable pageable){
+        JPAQuery<ProductDto.showSimple> selectFrom = jpaQueryFactory
+                .select(
+                        new QProductDto_showSimple(product)
+                )
+                .from(product);
+        if(searchOption.getCategory() == Category.LARGE){
+            selectFrom = joinLargeCategory(selectFrom, false);
+        } else if(searchOption.getCategory() == Category.SMALL){
+            selectFrom = joinSmallCategory(selectFrom, false);
+        } else if(searchOption.getCategory() == Category.SMALLEST){
+            selectFrom = joinSmallestCategory(selectFrom, false);
         } else {
-            selectFrom = joinAllLargeCategory(selectFrom);
-            selectFrom = joinAllSmallCategory(selectFrom);
-            selectFrom = joinAllSmallestCategory(selectFrom);
+            selectFrom = joinLargeCategory(selectFrom, false);
+            selectFrom = joinSmallCategory(selectFrom, false);
+            selectFrom = joinSmallestCategory(selectFrom, false);
         }
 
-        QueryResults<Product> result = selectFrom
-                .where(titleEquals(productTitle),
-                        categoryIdEquals(category, categoryId))
+        QueryResults<ProductDto.showSimple> result = selectFrom
+                .where(titleEquals(searchOption.getProductTitle()),
+                        categoryIdEquals(searchOption.getCategory(), searchOption.getCategoryId()))
                 .orderBy(product.createDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
 
-        List<ProductDto.show> list = result.getResults().stream()
-                .map(o->o.convertDto(category))
-                .collect(Collectors.toList());
+        List<ProductDto.showSimple> list = result.getResults();
         long totalCnt = result.getTotal();
 
-        return new PageImpl<ProductDto.show>(list, pageable, totalCnt);
+        return new PageImpl<ProductDto.showSimple>(list, pageable, totalCnt);
+    }
+
+    @Override
+    public ProductDto.showDetail findProductDetail(Long productId) {
+        JPAQuery<ProductDto.showDetail> selectFrom = jpaQueryFactory
+                .select(
+                        new QProductDto_showDetail(product)
+                )
+                .from(product);
+
+        selectFrom = joinLargeCategory(selectFrom, true);
+        selectFrom = joinSmallCategory(selectFrom, true);
+        selectFrom = joinSmallestCategory(selectFrom, true);
+
+        return selectFrom
+                .where(productIdEquals(productId))
+                .fetchOne();
     }
 
     private BooleanExpression titleEquals(String keyword) {
@@ -91,15 +107,22 @@ public class SearchProductRepositoryImpl implements SearchProductRepository {
         }
     }
 
-    public JPAQuery<Product> joinAllLargeCategory(JPAQuery<Product> selectFrom){
-        return selectFrom.innerJoin(product.largeCategory, largeCategory).fetchJoin();
+    private BooleanExpression productIdEquals(Long productId) {
+        return product.id.eq(productId);
     }
 
-    public JPAQuery<Product> joinAllSmallCategory(JPAQuery<Product> selectFrom){
-        return selectFrom.innerJoin(product.smallCategory, smallCategory).fetchJoin();
+    public <T> JPAQuery<T> joinLargeCategory(JPAQuery<T> selectFrom, boolean isFetch){
+        return (isFetch) ? selectFrom.innerJoin(product.largeCategory, largeCategory).fetchJoin()
+                : selectFrom.join(product.largeCategory, largeCategory);
     }
 
-    public JPAQuery<Product> joinAllSmallestCategory(JPAQuery<Product> selectFrom){
-        return selectFrom.innerJoin(product.smallestCategory, smallestCategory).fetchJoin();
+    public <T> JPAQuery<T> joinSmallCategory(JPAQuery<T> selectFrom, boolean isFetch){
+        return (isFetch) ? selectFrom.innerJoin(product.smallCategory, smallCategory).fetchJoin()
+                : selectFrom.join(product.smallCategory, smallCategory);
+    }
+
+    public <T> JPAQuery<T> joinSmallestCategory(JPAQuery<T> selectFrom, boolean isFetch){
+        return (isFetch) ? selectFrom.innerJoin(product.smallestCategory, smallestCategory).fetchJoin()
+                : selectFrom.join(product.smallestCategory, smallestCategory);
     }
 }

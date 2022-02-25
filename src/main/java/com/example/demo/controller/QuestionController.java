@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class QuestionController {
@@ -49,9 +50,9 @@ public class QuestionController {
     }
 
     @GetMapping("/questions")
-    public ResponseEntity<ResponseComDto> searchQuestions(Pageable pageable, Principal principal) {
+    public ResponseEntity<ResponseComDto> searchMyQuestions(Pageable pageable, Principal principal) {
         String username = principal.getName();
-        Page<QuestionDto.show> questions = questionService.showQuestionList(username, pageable);
+        Page<QuestionDto.show> questions = questionService.showMyQuestions(username, pageable);
         return new ResponseEntity<ResponseComDto>(
                 ResponseComDto.builder()
                         .resultMsg(null)
@@ -59,11 +60,21 @@ public class QuestionController {
                         .build(), HttpStatus.OK);
     }
 
-    @GetMapping("/questions/{questionId}")
-    public ResponseEntity<ResponseComDto> searchQuestions(@PathVariable Long questionId,
-                                                          Pageable pageable, Principal principal) {
+    @GetMapping("/question/{questionId}/comments")
+    public ResponseEntity<ResponseComDto> searchCommentsInMyQuestion(@PathVariable Long questionId, Principal principal) {
         String username = principal.getName();
-        QuestionDto.showDetail questionDetail = questionService.showQuestionDetail(username, questionId, pageable);
+        List<CommentDto.show> comments = questionService.showCommentsInMyQuestion(username, questionId);
+        return new ResponseEntity<ResponseComDto>(
+                ResponseComDto.builder()
+                        .resultMsg(null)
+                        .resultObj(comments)
+                        .build(), HttpStatus.OK);
+    }
+
+    @GetMapping("/question/{questionId}")
+    public ResponseEntity<ResponseComDto> searchMyQuestionDetail(@PathVariable Long questionId, Principal principal) {
+        String username = principal.getName();
+        QuestionDto.showDetail questionDetail = questionService.showMyQuestionsDetail(username, questionId);
         return new ResponseEntity<ResponseComDto>(
                 ResponseComDto.builder()
                         .resultMsg(null)

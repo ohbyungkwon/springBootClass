@@ -4,6 +4,7 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 public class QuestionDto {
     @Setter
@@ -19,6 +20,23 @@ public class QuestionDto {
     @Getter
     @Builder
     @NoArgsConstructor
+    public static class showSimple {
+        private String questionContent;
+        private Date questionCreateDate;
+        private Date questionModifiedDate;
+
+        @QueryProjection
+        public showSimple(String questionContent, Date questionCreateDate, Date questionModifiedDate) {
+            this.questionContent = questionContent;
+            this.questionCreateDate = questionCreateDate;
+            this.questionModifiedDate = questionModifiedDate;
+        }
+    }
+
+    @Setter
+    @Getter
+    @Builder
+    @NoArgsConstructor
     public static class show {
         private String questionContent;
         private Date questionCreateDate;
@@ -27,7 +45,6 @@ public class QuestionDto {
         private String productTitle;
 
         @QueryProjection
-
         public show(String questionContent, Date questionCreateDate, Date questionModifiedDate,
                     String productImageUrl, String productTitle) {
             this.questionContent = questionContent;
@@ -48,19 +65,17 @@ public class QuestionDto {
         private Date questionModifiedDate;
         private String productImageUrl;
         private String productTitle;
-        private String commentContent;
-        private Date commentCreateDate;
+        private List<CommentDto.show> commentDtoList;
 
         @QueryProjection
         public showDetail(String questionContent, Date questionCreateDate, Date questionModifiedDate,
-                          String productImageUrl, String productTitle, String commentContent, Date commentCreateDate) {
+                          String productImageUrl, String productTitle, List<CommentDto.show> commentDtoList) {
             this.questionContent = questionContent;
             this.questionCreateDate = questionCreateDate;
             this.questionModifiedDate = questionModifiedDate;
             this.productImageUrl = productImageUrl;
             this.productTitle = productTitle;
-            this.commentContent = commentContent;
-            this.commentCreateDate = commentCreateDate;
+            this.commentDtoList = commentDtoList;
         }
     }
 }

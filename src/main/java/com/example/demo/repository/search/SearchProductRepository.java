@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface SearchProductRepository {
-    Page<ProductDto.show> findProductWithCategory(String productTitle, Category category,
-                                                  Long categoryId, Pageable pageable);
+    Page<ProductDto.showSimple> findProductWithCategory(ProductDto.searchOption searchOption, Pageable pageable);
+
+    ProductDto.showDetail findProductDetail(Long productId);
 }

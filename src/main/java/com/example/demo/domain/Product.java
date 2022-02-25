@@ -94,35 +94,4 @@ public class Product {
         smallCategory.getProduct().add(this);
         largeCategory.getProduct().add(this);
     }
-
-
-    public ProductDto.show convertDto(Category category) {
-        ProductDto.show temp = ProductDto.show.builder()
-                .id(this.id)
-                .title(this.title)
-                .price(this.price)
-                .imageUrl(this.imageUrl)
-                .optional(this.memo)
-                .build();
-
-        if (category == Category.LARGE) {
-            temp.getLargeCategory().setId(this.largeCategory.getId());
-            temp.getLargeCategory().setTitle(this.largeCategory.getTitle());
-        } else if (category == Category.SMALL){
-            temp.getSmallCategory().setId(this.smallCategory.getId());
-            temp.getSmallCategory().setTitle(this.smallCategory.getTitle());
-        } else if(category == Category.SMALLEST){
-            temp.getSmallestCategory().setId(this.smallestCategory.getId());
-            temp.getSmallestCategory().setTitle(this.smallestCategory.getTitle());
-        } else{
-            temp.getLargeCategory().setId(this.largeCategory.getId());
-            temp.getLargeCategory().setTitle(this.largeCategory.getTitle());
-            temp.getSmallCategory().setId(this.smallCategory.getId());
-            temp.getSmallCategory().setTitle(this.smallCategory.getTitle());
-            temp.getSmallestCategory().setId(this.smallestCategory.getId());
-            temp.getSmallestCategory().setTitle(this.smallestCategory.getTitle());
-        }
-
-        return temp;
-    }
 }

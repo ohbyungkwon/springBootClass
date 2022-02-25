@@ -1,5 +1,8 @@
 package com.example.demo.dto;
 
+import com.example.demo.domain.LargeCategory;
+import com.example.demo.domain.SmallCategory;
+import com.example.demo.domain.SmallestCategory;
 import com.example.demo.domain.enums.Category;
 import lombok.*;
 
@@ -15,6 +18,20 @@ public class CategoryDto {
     public static class show {
         private Long id;
         private String title;
+
+        public void convertDto(LargeCategory largeCategory, SmallCategory smallCategory,
+                    SmallestCategory smallestCategory) {
+            if(largeCategory != null){
+                this.id = largeCategory.getId();
+                this.title = largeCategory.getTitle();
+            } else if(smallCategory != null){
+                this.id = smallCategory.getId();
+                this.title = smallCategory.getTitle();
+            } else{
+                this.id = smallestCategory.getId();
+                this.title = smallestCategory.getTitle();
+            }
+        }
     }
 
     @Setter

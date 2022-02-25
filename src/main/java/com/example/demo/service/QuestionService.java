@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class QuestionService {
     private final QuestionRepository questionRepository;
@@ -74,21 +76,37 @@ public class QuestionService {
     }
 
     @Transactional
-    public Page<QuestionDto.show> showQuestionList(String username, Pageable pageable){
+    public Page<QuestionDto.show> showMyQuestions(String username, Pageable pageable){
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new BadClientException("사용자 정보가 없습니다."));
 
-        return questionRepository.findQuestionWithProductInfo(username, pageable);
+        return questionRepository.findMyQuestionsWithProduct(user.getId(), pageable);
     }
 
     @Transactional
-    public QuestionDto.showDetail showQuestionDetail(String username, Long questionId, Pageable pageable){
+    public List<CommentDto.show> showCommentsInMyQuestion(String username, Long questionId){
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new BadClientException("사용자 정보가 없습니다."));
 
         questionRepository.findById(questionId)
                         .orElseThrow(() -> new BadClientException("질문 정보가 없습니다."));
 
-        return questionRepository.findQuestionAndCommentWithProductInfo(username, questionId, pageable);
+        return questionRepository.findCommentsInMyQuestion(user.getId(), questionId);
+    }
+
+    @Transactional
+    public List<QuestionDto.showSimple> showQuestionsInProduct(Long productId){
+        return questionRepository.findQuestionsInProduct(productId);
+    }
+
+    @Transactional
+    public QuestionDto.showDetail showMyQuestionsDetail(String username, Long questionId){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new BadClientException("사용자 정보가 없습니다."));
+
+        questionRepository.findById(questionId)
+                .orElseThrow(() -> new BadClientException("질문 정보가 없습니다."));
+
+        return questionRepository.findMyQuestionDetail(user.getId(), questionId);
     }
 }
