@@ -25,6 +25,7 @@ public class ProductOrderController {
         this.productOrderService = productOrderService;
     }
 
+    // POST localhost:8080/orders -> dispatchServlet
     @PostMapping("/orders")
     public ResponseEntity<ResponseComDto> create(OrderDto.Create orderDto, Principal principal) {
         productOrderService.saveOrder(orderDto, principal.getName());
@@ -35,6 +36,7 @@ public class ProductOrderController {
                         .build(), HttpStatus.OK);
     }
 
+    // GET localhost:8080/orders -> dispatchServlet
     @GetMapping("/orders")
     public ResponseEntity<ResponseComDto> searchMyProductOrder(Principal principal, Pageable pageable) {
         String username = principal.getName();

@@ -10,7 +10,7 @@ import com.example.demo.domain.ProductOrder;
 import com.example.demo.dto.OrderDto;
 import com.example.demo.dto.QOrderDto_showDetail;
 import com.example.demo.dto.QOrderDto_showSimple;
-import com.example.demo.repository.search.SearchProductOrderRepository;
+import com.example.demo.repository.search.ProductOrderRepositoryCustom;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +22,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class SearchProductOrderRepositoryImpl implements SearchProductOrderRepository {
+public class ProductOrderRepositoryImpl implements ProductOrderRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Autowired
-    public SearchProductOrderRepositoryImpl(JPAQueryFactory jpaQueryFactory) {
+    public ProductOrderRepositoryImpl(JPAQueryFactory jpaQueryFactory) {
         this.jpaQueryFactory = jpaQueryFactory;
     }
 

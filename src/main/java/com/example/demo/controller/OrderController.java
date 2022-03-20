@@ -23,14 +23,14 @@ public class OrderController extends AbstractController{
         this.productOrderService = productOrderService;
     }
 
-    @PostMapping("/orders")
-    public ResponseEntity<ResponseComDto> createOrder(@RequestBody OrderDto.Create orderDto, Principal principal){
-        ProductOrder productOrder = productOrderService.saveOrder(orderDto, principal.getName());
-
-        return new ResponseEntity<>(
-                ResponseComDto.builder()
-                        .resultMsg("주문 완료되었습니다.")
-                        .resultObj(orderDto)
-                        .build(), HttpStatus.OK);
-    }
+//    @PostMapping("/orders")
+//    public ResponseEntity<ResponseComDto> createOrder(@RequestBody OrderDto.Create orderDto, Principal principal){
+//        ProductOrder productOrder = productOrderService.saveOrder(orderDto, principal.getName());
+//
+//        return new ResponseEntity<>(
+//                ResponseComDto.builder()
+//                        .resultMsg("주문 완료되었습니다.")
+//                        .resultObj(orderDto)
+//                        .build(), HttpStatus.OK);
+//    }
 }

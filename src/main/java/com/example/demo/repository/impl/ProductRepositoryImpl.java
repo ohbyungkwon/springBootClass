@@ -1,20 +1,17 @@
 package com.example.demo.repository.impl;
 
-import com.example.demo.domain.Product;
 import static com.example.demo.domain.QProduct.product;
 import static com.example.demo.domain.QLargeCategory.largeCategory;
 import static com.example.demo.domain.QSmallCategory.smallCategory;
 import static com.example.demo.domain.QSmallestCategory.smallestCategory;
 
-import com.example.demo.domain.QLoginHistory;
 import com.example.demo.domain.enums.Category;
 import com.example.demo.dto.ProductDto;
 import com.example.demo.dto.QProductDto_showDetail;
 import com.example.demo.dto.QProductDto_showSimple;
-import com.example.demo.repository.search.SearchProductRepository;
+import com.example.demo.repository.search.ProductRepositoryCustom;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +21,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
-public class SearchProductRepositoryImpl implements SearchProductRepository {
+public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Autowired
-    public SearchProductRepositoryImpl(JPAQueryFactory jpaQueryFactory) {
+    public ProductRepositoryImpl(JPAQueryFactory jpaQueryFactory) {
         this.jpaQueryFactory = jpaQueryFactory;
     }
 

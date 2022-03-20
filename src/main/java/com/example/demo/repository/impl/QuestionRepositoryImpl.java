@@ -8,7 +8,7 @@ import static com.example.demo.domain.QComment.comment;
 import com.example.demo.domain.Comment;
 import com.example.demo.domain.Question;
 import com.example.demo.dto.*;
-import com.example.demo.repository.search.SearchQuestionRepository;
+import com.example.demo.repository.search.QuestionRepositoryCustom;
 import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -24,11 +24,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
-public class SearchQuestionRepositoryImpl implements SearchQuestionRepository {
+public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Autowired
-    public SearchQuestionRepositoryImpl(JPAQueryFactory jpaQueryFactory) {
+    public QuestionRepositoryImpl(JPAQueryFactory jpaQueryFactory) {
         this.jpaQueryFactory = jpaQueryFactory;
     }
 

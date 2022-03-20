@@ -40,7 +40,7 @@ public class OAuth2CustomUserDetailService extends DefaultOAuth2UserService {
      * 사용자 정보 추출
      */
     @Transactional(readOnly = true)
-    private OAuth2User processOAuthUser(OAuth2UserRequest userRequest, OAuth2User oAuth2User) {
+    OAuth2User processOAuthUser(OAuth2UserRequest userRequest, OAuth2User oAuth2User) {
         String providerType = userRequest.getClientRegistration().getRegistrationId();
         if(!AuthProvider.kakao.toString().equals(providerType) &&
             !AuthProvider.naver.toString().equals(providerType)){
